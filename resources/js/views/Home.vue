@@ -1,11 +1,11 @@
 <template>
     <div class="flex w-full grow flex-col border border-black" v-if="items.length !== 0">
         <div class="flex bg-white h-20">
-            <div class="border border-black w-20"></div>
+            <div class="border border-black w-20 shrink-0"></div>
             <div class="border border-black grow">
                 <img @click="loadItem(items[0].id)" :src="items[0].image_src" alt="" class="w-full h-full object-cover object-bottom cursor-pointer opacity-40 hover:opacity-100">
             </div>
-            <div class="border border-black  w-20"></div>
+            <div class="border border-black  w-20 shrink-0"></div>
         </div>
         <div class="flex bg-white grow">
             <div class="border border-black w-20 shrink-0">
@@ -19,11 +19,11 @@
             </div>
         </div>
         <div class="flex bg-white  h-20">
-            <div class="border border-black w-20"></div>
+            <div class="border border-black w-20 shrink-0"></div>
             <div class="border border-black grow">
                 <img :src="items[4].image_src" @click="loadItem(items[4].id)" alt="" class="w-full h-full object-cover object-top cursor-pointer opacity-40 hover:opacity-100">
             </div>
-            <div class="border border-black  w-20"></div>
+            <div class="border border-black  w-20 shrink-0"></div>
         </div>
     </div>
 </template>
