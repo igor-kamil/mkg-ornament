@@ -26,6 +26,9 @@
             <div class="border border-black  w-20 shrink-0"></div>
         </div>
     </div>
+    <div v-if="isLoading" class="fixed inset-0 z-50 flex items-center justify-center">
+        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+    </div>
 </template>
 
 <script setup>
@@ -37,6 +40,7 @@ const router = useRouter()
 const locale = ref('sk')
 
 const items = ref([])
+const isLoading = ref(false)
 
 onMounted(async () => {
     locale.value = getActiveLanguage()
@@ -45,8 +49,10 @@ onMounted(async () => {
 })
 
 const loadItem = async(id) => {
+    isLoading.value = true
     const response = await axios.get(`/api/items/?id=${id}`)
     items.value = response.data.data
+    isLoading.value = false
 }
 
 </script>
