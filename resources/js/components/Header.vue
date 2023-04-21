@@ -18,12 +18,7 @@
             </svg>
         </div>
         <h1 class="text-xl text-center grow">Objekt forscher</h1>
-        <div class="flex-1 px-3 border-l-2 border-transparent text-right" v-if="$route.name === 'my_collection'">
-            <button class="bg-green rounded-xl text-sm px-3 py-1 font-bold" @click="scroll('share')">
-                {{ $t('Share') }}
-            </button>
-        </div>
-        <FavouritesCount v-else class="border-l-2 border-l-transparent px-4 py-2" :show-tooltip="isActive" />
+        <!-- <FavouritesCount class="border-l-2 border-l-transparent px-4 py-2" :show-tooltip="isActive" /> -->
     </div>
 </template>
 
