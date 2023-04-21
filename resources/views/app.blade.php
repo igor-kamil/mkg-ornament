@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <div id="app" class="md:max-w-lg md:mx-auto md:my-auto bg-white min-h-screen flex flex-col"></div>
+    <div id="app" class="lg:max-w-lg lg:mx-auto lg:my-auto bg-white min-h-screen flex flex-col"></div>
     <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 
