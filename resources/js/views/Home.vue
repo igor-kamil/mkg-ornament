@@ -12,7 +12,7 @@
                 <img :src="items[1].image_src" @click="loadItem(items[1].id)" alt="" class="w-full h-full object-cover object-right cursor-pointer opacity-40 hover:opacity-100">
             </div>
             <div class="border border-black grow">
-                <img :src="items[2].image_src" alt="" class="w-full h-full object-cover">
+                <img :src="items[2].image_src" @click="toggleDetail()" alt="" class="w-full h-full object-cover cursor-pointer">
             </div>
             <div class="border border-black  w-20 shrink-0">
                 <img :src="items[3].image_src" @click="loadItem(items[3].id)" alt="" class="w-full h-full object-cover object-left cursor-pointer opacity-40 hover:opacity-100">
@@ -29,18 +29,21 @@
     <div v-if="isLoading" class="fixed inset-0 z-50 flex items-center justify-center">
         <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
     </div>
+    <ItemDetail :visible="detailActive" @close="toggleDetail" :item="items[2]" />
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getActiveLanguage, loadLanguageAsync } from 'laravel-vue-i18n'
+import ItemDetail from '../components/ItemDetail.vue'
 
 const router = useRouter()
 const locale = ref('sk')
 
 const items = ref([])
 const isLoading = ref(false)
+const detailActive = ref(false)
 
 onMounted(async () => {
     locale.value = getActiveLanguage()
@@ -53,6 +56,10 @@ const loadItem = async(id) => {
     const response = await axios.get(`/api/items/?id=${id}`)
     items.value = response.data.data
     isLoading.value = false
+}
+
+const toggleDetail = () => {
+    detailActive.value = !detailActive.value
 }
 
 </script>
