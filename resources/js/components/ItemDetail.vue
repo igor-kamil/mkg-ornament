@@ -1,8 +1,8 @@
 <template>
     <div class="fixed inset-0 z-50 flex justify-center items-center" v-if="visible">
-        <div class="max-h-full max-w-full overflow-y-auto">
-            <div class="bg-black opacity-70 absolute inset-0 cursor-zoom-out" @click="emit('close')" />
-            <div class="relative mx-4 w-full max-w-2xl bg-white rounded-xl">
+        <div class="bg-black opacity-70 absolute inset-0 cursor-zoom-out" @click="emit('close')" />
+        <div class="max-h-full overflow-y-auto overflow-x-hidden p-4">
+            <div class="relative w-full max-w-2xl bg-white rounded-xl">
                 <img :src="item.image_src" :alt="item.title" class="w-full rounded-t-xl" />
                 <div class="px-4 py-6">
                     <h3 class="text-gray-dark text-base" v-if="item.collection">
