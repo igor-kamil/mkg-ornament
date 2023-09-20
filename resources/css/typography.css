@@ -1,4 +1,32 @@
 @font-face {
+    font-family: 'Scto Grotesk A';
+    src: url(../fonts/Scto-Grotesk-A-Regular.woff) format('woff');
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+}
+@font-face {
+    font-family: 'Scto Grotesk A';
+    src: url(../fonts/Scto-Grotesk-A-Light.woff) format('woff');
+    font-style: normal;
+    font-weight: 300;
+    font-display: block;
+}
+@font-face {
+    font-family: 'Scto Grotesk A';
+    src: url(../fonts/Scto-Grotesk-A-Medium.woff) format('woff');
+    font-style: normal;
+    font-weight: 500;
+    font-display: block;
+}
+/* @font-face {
+    font-family: 'GT Alpina Fine';
+    src: url(../fonts/GT-Alpina-Fine-Extended-Thin-Italic.woff2) format('woff2'),
+        url(../fonts/GT-Alpina-Fine-Extended-Thin-Italic.woff) format('woff');
+} */
+
+/* 
+@font-face {
     font-family: 'GTWalsheim';
     src: url('../fonts/GT-Walsheim/GT-Walsheim-Regular.eot');
     src: url('../fonts/GT-Walsheim/GT-Walsheim-Regular.eot?#iefix') format('embedded-opentype'),
@@ -18,7 +46,7 @@
         url('../fonts/GT-Walsheim/GT-Walsheim-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
-}
+} */
 
 /*
 @font-face {

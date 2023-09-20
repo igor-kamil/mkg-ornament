@@ -48,7 +48,7 @@ module.exports = {
             transparent: 'transparent',
         },
         fontFamily: {
-            sans: ['GTWalsheim', 'sans-serif'],
+            sans: ['Scto Grotesk A', 'sans-serif'],
         },
         fontSize: {
             sm: ['14px'],
