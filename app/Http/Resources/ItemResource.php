@@ -19,17 +19,16 @@ class ItemResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'work_id' => $this->workID,
-            'title' => $this->identified_by_Appellation_label_value,
-            'author' => $this->was_present_at_Activity_had_participant_actor_label_value,
+            'title' => $this->title,
+            'author' => $this->author,
             'dating' => $this->dating,
-            'description' => $this->has_type_comment,
-            'image_src' => $this->resource_link_resource_value_internal,
-            'web_url' => $this->isShownAt_uri,
-            'collection' => $this->member_of_collection_label_value,
-            'object' => $this->referred_to_by_LinguisticObject_content_value,
-            'year_from' => $this->was_present_at_Activity_has_time_span_begin_of_the_begin,
-            'year_to' => ($this->was_present_at_Activity_has_time_span_end_of_the_end) ? (int)Str::before($this->was_present_at_Activity_has_time_span_end_of_the_end, '-'): null,
+            'description' => $this->description,
+            'image_src' => $this->image_src,
+            'web_url' => $this->web_url,
+            'collection' => $this->collection,
+            'object' => $this->object,
+            'year_from' => $this->year_from,
+            'year_to' => $this->year_to
         ];
     }
 

@@ -6,4 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
+    public $incrementing = false;
+    protected $keyType = 'string';
 }
