@@ -23,7 +23,7 @@ class ItemResource extends JsonResource
             'author' => $this->author,
             'dating' => $this->dating,
             'description' => $this->description,
-            'image_src' => $this->image_src,
+            'image_src' => $this->getImageRoute(), //$this->image_src,
             'web_url' => $this->web_url,
             'collection' => $this->collection,
             'object' => $this->object,
@@ -32,9 +32,10 @@ class ItemResource extends JsonResource
         ];
     }
 
-    private function getImageRoute($width = 600)
+    private function getImageRoute()
     {
-        return config('services.webumenia.url') . '/dielo/nahlad/' . $this->id . '/' . $width;
+        // return config('services.webumenia.url') . '/dielo/nahlad/' . $this->id . '/' . $width;
+        return 'https://digicult-web.digicult-verbund.de/entity-resources/images/digicult-web-mkg/1/' . $this->id . '.jpg';
     }
 
     private function getDescription()

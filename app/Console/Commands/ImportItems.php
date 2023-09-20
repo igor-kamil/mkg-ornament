@@ -5,8 +5,12 @@ namespace App\Console\Commands;
 use Airtable;
 use App\Models\Item;
 use App\Models\Exhibition;
-use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
+use Spatie\SimpleExcel\SimpleExcelReader;
 
 class ImportItems extends Command
 {
@@ -15,14 +19,14 @@ class ImportItems extends Command
      *
      * @var string
      */
-    protected $signature = 'import:items';
+    protected $signature = 'import:items {file}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Import items from airtable';
+    protected $description = 'Import items from a CSV file';
 
     /**
      * Create a new command instance.
@@ -41,54 +45,38 @@ class ImportItems extends Command
      */
     public function handle()
     {
-        $exhibition_ids = Exhibition::all()->pluck('id');
-        $records = Airtable::table('items')
-            ->where('ID', '!=', '')
-            ->get();
-        $bar = $this->output->createProgressBar(count($records));
-        $bar->start();
-        $records->each(function ($record) use ($bar, $exhibition_ids) {
-            $bar->advance();
-            $item = Item::unguarded(
-                fn() => Item::firstOrNew([
-                    'id' => $record['fields']['ID'],
-                ])
-            );
+        $filePath = $this->argument('file');
 
-            $item->airtable_id = $record['id'];
+        // Read the CSV file using spatie/simple-excel
+        $rows = SimpleExcelReader::create($filePath)->useDelimiter(';')->getRows();
 
-            $item->title = Arr::get($record, 'fields.Názov diela');
-
-            $item->description = [
-                'sk' => Arr::get($record, 'fields.app text'),
-                'en' => Arr::get($record, 'fields.app text preklad'),
-            ];
-
-            $item->author_name = [
-                'sk' => Arr::get($record, 'fields.Autor/ka'),
-                'en' => Arr::get($record, 'fields.Autor/ka EN'),
-            ];
-
-            $item->offset_top = Arr::get($record, 'fields.offsetTop', 0);
-
-            $item->save();
-
-            if ($item->code && $exhibition_ids->contains(Arr::get($record, 'fields.Výstava.0'))) {
-                $item->code->exhibition_id = Arr::get($record, 'fields.Výstava.0');
-                $item->code->save();
+        $rows->each(function (array $row) {
+            try {
+                Item::upsert([
+                    'id' => Arr::get($row, 'Inventarnummer'),
+                    'object' => Arr::get($row, 'Objektbezeichnung'),
+                    'title' => Arr::get($row, 'Titel'),
+                    'author' => Arr::get($row, 'Beteiligte Person(en) / Institution(en)'),
+                    // 'description' => Arr::g$row, et(''),
+                    'material' => Arr::get($row, 'Material'),
+                    'technique' => Arr::get($row, 'Technik'),
+                    'iconography' => Str::limit(Arr::get($row, 'Ikonographie'), 255),
+                    'style' => Arr::get($row, 'Stil'),
+                    // 'image_src' => Arr::g$row, et(''),
+                    // 'web_url' => Arr::g$row, et(''),
+                    'collection' => Arr::get($row, 'Sammlung'),
+                    'year_from' => Arr::get($row, 'Datierung von'),
+                    'year_to' => Arr::get($row, 'Datierung bis'),
+                ], ['id']);
+            } catch (QueryException $e) {
+                // Log the exception and continue with the next row
+                Log::error('Error processing item: ' . Arr::get($row, 'Inventarnummer'));
+                Log::error('Exception: ' . $e->getMessage());
             }
-            
-            // update code in airtable
-            if (
-                \App::environment('production') &&
-                (empty($record['fields']['code']) || $record['fields']['code'] != $item->code->code)
-            ) {
-                Airtable::table('items')->patch($record['id'], ['code' => $item->code->code]);
-            }
+            // in the first pass $rowProperties will contain
+            // ['email' => 'john@example.com', 'first_name' => 'john']
         });
 
-        $bar->finish();
-        $this->newLine();
-        $this->info('Done 🎉');
+        $this->info('Items imported successfully.');
     }
 }

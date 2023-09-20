@@ -16,6 +16,7 @@
         "mtvs/eloquent-hashids": "^3.2",
         "spatie/laravel-medialibrary": "^10.0.0",
         "spatie/laravel-translatable": "^6.1",
+        "spatie/simple-excel": "^3.2",
         "tapp/laravel-airtable": "^1.4"
     },
     "require-dev": {
