@@ -23,7 +23,7 @@ class CreateItemsTable extends Migration
             $table->string('description')->nullable();
             $table->string('material')->nullable();
             $table->string('technique')->nullable();
-            $table->string('iconography')->nullable();
+            $table->string('iconography', 1024)->nullable();
             $table->string('style')->nullable();
             $table->string('image_src')->nullable();
             $table->string('web_url')->nullable();
