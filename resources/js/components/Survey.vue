@@ -16,17 +16,17 @@
 <script setup>
 import { useSurveyStore } from '../stores/SurveyStore'
 import { getActiveLanguage } from 'laravel-vue-i18n'
-import { SURVEY_SK, SURVEY_EN } from '../consts'
+// import { SURVEY_SK, SURVEY_EN } from '../consts'
 import ConfirmButton from '../components/ConfirmButton.vue'
 
 const surveyStore = useSurveyStore()
 
 const getFeedback = () => {
     surveyStore.done()
-    if (getActiveLanguage() == 'sk') {
-        window.open(SURVEY_SK, '_blank').focus()
-    } else {
-        window.open(SURVEY_EN, '_blank').focus()
-    }
+    // if (getActiveLanguage() == 'sk') {
+    //     window.open(SURVEY_SK, '_blank').focus()
+    // } else {
+    //     window.open(SURVEY_EN, '_blank').focus()
+    // }
 }
 </script>

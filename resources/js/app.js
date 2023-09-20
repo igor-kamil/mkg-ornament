@@ -1,4 +1,4 @@
-require('./bootstrap')
+import './bootstrap'
 
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -62,15 +62,6 @@ const routes = [
             edit: true,
             code: HEADER_CODES.NONE,
             title: 'Artwork detail',
-        },
-    },
-    {
-        name: 'story',
-        path: '/story/:id?',
-        component: Story,
-        meta: {
-            title: 'Story',
-            id: process.env.MIX_DEFAULT_STORY,
         },
     },
     {

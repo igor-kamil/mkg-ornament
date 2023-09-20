@@ -74,7 +74,6 @@
             </div>
         </div>
     </div>
-    <Survey />
     <CardModal @close="toggleModal" :visible="modalActive">
         <h3 class="font-bold text-2xl my-4">{{ $t('Remove all artworks?') }}</h3>
         <div class="text-base">{{ $t('This cannot be undone') }}</div>
@@ -93,7 +92,6 @@ import CardModal from '../components/CardModal.vue'
 import ConfirmButton from '../components/ConfirmButton.vue'
 import ItemLoader from '../components/ItemLoader.vue'
 import ItemThumbnail from '../components/ItemThumbnail.vue'
-import Survey from '../components/Survey.vue'
 import Thumbnail from '../components/Thumbnail.vue'
 
 const route = useRoute()

@@ -13,13 +13,12 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000">
     <meta name="theme-color" content="#ffffff">
 
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>Objekt forscher</title>
 </head>
 
 <body>
     <div id="app" class="lg:max-w-lg lg:mx-auto lg:my-auto bg-white min-h-screen flex flex-col"></div>
-    <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 
 </html>
