@@ -4,14 +4,16 @@ namespace Deployer;
 require 'recipe/laravel.php';
 require 'contrib/npm.php';
 
-set('bin/php', 'php8.1');
+set('bin/php', 'php8.2');
 set('bin/composer', '{{bin/php}} $(which composer)');
 
+set('writable_mode', 'chmod');
+
 // Project name
-set('application', 'bookmarks');
+set('application', 'mkg-ornament');
 
 // Project repository
-set('repository', 'git@github.com:SlovakNationalGallery/kod.sng.sk.git');
+set('repository', 'git@github.com:igor-kamil/mkg-ornament.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
 set('git_tty', true);
@@ -26,14 +28,14 @@ set('allow_anonymous_stats', false);
 
 // Hosts
 
-host('lab_sng@webumenia.sk')
-    ->set('deploy_path', '/var/www/bookmarks.sng.sk')
-    ->set('user', 'lab_sng');
+host('igo')
+    ->set('hostname', 'igo')
+    ->set('deploy_path', '/home/igo.sk/private/mkg-ornament');
 
 // Tasks
 
 task('build', function () {
-    run('cd {{release_path}} && {{bin/npm}} run production');
+    run('cd {{release_path}} && {{bin/npm}} run build');
 });
 
 // [Optional] if deploy fails automatically unlock.
