@@ -17,6 +17,7 @@
         "spatie/laravel-medialibrary": "^10.0.0",
         "spatie/laravel-translatable": "^6.1",
         "spatie/simple-excel": "^3.2",
+        "symfony/filesystem": "^6.3",
         "tapp/laravel-airtable": "^1.4"
     },
     "require-dev": {
