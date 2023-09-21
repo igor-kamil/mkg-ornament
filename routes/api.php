@@ -29,7 +29,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 */
 
 Route::get('/items/', function (Request $request) {
-    $items = Item::inRandomOrder()->take(5)->get();
+    $items = Item::whereNotNull('image_src')->inRandomOrder()->take(5)->get();
     if ($request->has('id')) {
         $item = Item::findOrFail($request->input('id'));
         $items = $items->replace([2 => $item]);
