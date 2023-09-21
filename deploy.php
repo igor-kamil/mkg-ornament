@@ -33,17 +33,23 @@ host('igo')
     ->set('deploy_path', '/home/igo.sk/private/mkg-ornament');
 
 // Tasks
-
 task('build', function () {
-    run('cd {{release_path}} && {{bin/npm}} run build');
+    cd('{{release_path}}');
+
+    run('npm ci && npm run build');
 });
 
-// [Optional] if deploy fails automatically unlock.
+desc('Composer dump autoload');
+task('composer:dump:autoload', function () {
+    run('cd {{release_path}} && composer dump-autoload');
+});
+
+desc('Creates the symbolic links configured for the application');
+task('artisan:storage:link', artisan('storage:link --relative', ['min' => 5.3]));
+
+// Hooks
+before('artisan:migrate', 'artisan:cache:clear');
+before('artisan:migrate', 'composer:dump:autoload');
+after('deploy:vendors', 'build');
+// after('deploy:symlink', 'artisan:queue:restart');
 after('deploy:failed', 'deploy:unlock');
-
-// Migrate database before symlink new release.
-
-before('deploy:symlink', 'artisan:migrate');
-
-after('deploy:update_code', 'npm:install');
-after('deploy:shared', 'build');
