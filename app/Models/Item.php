@@ -13,4 +13,9 @@ class Item extends Model
         'image_src',
     ];
 
+    public function assets()
+    {
+        return $this->hasMany(ItemAsset::class);
+    }
+
 }
