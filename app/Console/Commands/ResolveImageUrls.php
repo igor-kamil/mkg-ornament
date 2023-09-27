@@ -31,10 +31,10 @@ class ResolveImageUrls extends Command
                 // Check if the image URL exists
                 $response = Http::head($imageUrl);
 
-                if ($response->successful()) {
+                if ($response->header('Content-Type') === 'image/jpeg') {
                     $item->update(['image_src' => $imageUrl]);
                     // $this->info("Resolved image URL for item: {$item->id}");
-                } 
+                }
                 $this->output->progressAdvance();
             }
         });
