@@ -18,4 +18,9 @@ class Item extends Model
         return $this->hasMany(ItemAsset::class);
     }
 
+    public function previewAsset()
+    {
+        return $this->hasOne(ItemAsset::class)->oldest();
+    }
+
 }

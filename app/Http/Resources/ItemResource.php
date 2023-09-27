@@ -35,7 +35,8 @@ class ItemResource extends JsonResource
     private function getImageRoute()
     {
         // return config('services.webumenia.url') . '/dielo/nahlad/' . $this->id . '/' . $width;
-        return 'https://digicult-web.digicult-verbund.de/entity-resources/images/digicult-web-mkg/1/' . $this->id . '.jpg';
+        // return 'https://digicult-web.digicult-verbund.de/entity-resources/images/digicult-web-mkg/1/' . $this->id . '.jpg';
+        return 'https://mdo.mkg-hamburg.de/MDO/mediadelivery/rendition/' . $this->previewAsset->mdc_id . '/-FJPG-B1000';
     }
 
     private function getDescription()

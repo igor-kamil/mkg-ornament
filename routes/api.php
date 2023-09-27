@@ -29,14 +29,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 */
 
 Route::get('/items/', function (Request $request) {
-    $mainItem =  ($request->has('id')) ? Item::findOrFail($request->input('id')) : Item::whereNotNull('image_src')->inRandomOrder()->first();
-    $similiarItems = Item::whereNotNull('image_src')->where('collection', 'LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
-    $differentItems = Item::whereNotNull('image_src')->where('collection', 'NOT LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
+    $mainItem =  ($request->has('id')) ? Item::findOrFail($request->input('id')) : Item::has('assets')->inRandomOrder()->first();
+    $similiarItems = Item::has('assets')->where('collection', 'LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
+    $differentItems = Item::has('assets')->where('collection', 'NOT LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
     $items = collect([
         $differentItems[0],
         $similiarItems[0],
         $mainItem,
-        $similiarItems[0],
+        $similiarItems[1],
         $differentItems[1],
     ]);
     return ItemResource::collection($items);
