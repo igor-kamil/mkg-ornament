@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="md:bg-gray-softest">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 
 <head>
     <meta charset="utf-8">
@@ -17,8 +17,8 @@
     <title>Objekt forscher</title>
 </head>
 
-<body>
-    <div id="app" class="lg:max-w-lg lg:mx-auto lg:my-auto bg-white min-h-screen flex flex-col"></div>
+<body class="h-full">
+    <div id="app" class="bg-white"></div>
 </body>
 
 </html>

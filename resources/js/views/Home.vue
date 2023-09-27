@@ -1,29 +1,29 @@
 <template>
-    <div class="flex w-full grow flex-col border border-black" v-if="items.length !== 0">
-        <div class="flex bg-white h-20 shrink-0">
-            <div class="border border-black w-20 shrink-0"></div>
+    <div class="flex w-full h-screen max-h-screen flex-col border border-black" v-if="items.length !== 0">
+        <div class="flex bg-white h-20 lg:h-32 shrink-0">
+            <div class="border border-black w-20 lg:w-32 shrink-0"></div>
             <div class="border border-black grow">
                 <img @click="loadItem(items[0].id)" :src="items[0].image_src" alt="" class="w-full h-full object-cover object-bottom cursor-pointer opacity-40 hover:opacity-100">
             </div>
-            <div class="border border-black  w-20 shrink-0"></div>
+            <div class="border border-black  w-20 lg:w-32 shrink-0"></div>
         </div>
         <div class="flex bg-white grow">
-            <div class="border border-black w-20 shrink-0">
+            <div class="border border-black w-20 lg:w-32 shrink-0">
                 <img :src="items[1].image_src" @click="loadItem(items[1].id)" alt="" class="w-full h-full object-cover object-right cursor-pointer opacity-40 hover:opacity-100">
             </div>
-            <div class="border border-black grow">
+            <div class="border border-black grow max-h-[calc(100vh-10rem)] lg:max-h-[calc(100vh-16rem)]">
                 <img :src="items[2].image_src" @click="toggleDetail()" alt="" class="w-full h-full object-cover cursor-pointer">
             </div>
-            <div class="border border-black  w-20 shrink-0">
+            <div class="border border-black  w-20 lg:w-32 shrink-0">
                 <img :src="items[3].image_src" @click="loadItem(items[3].id)" alt="" class="w-full h-full object-cover object-left cursor-pointer opacity-40 hover:opacity-100">
             </div>
         </div>
-        <div class="flex bg-white  h-20 shrink-0">
-            <div class="border border-black w-20 shrink-0"></div>
+        <div class="flex bg-white  h-20 lg:h-32 shrink-0">
+            <div class="border border-black w-20 lg:w-32 shrink-0"></div>
             <div class="border border-black grow">
                 <img :src="items[4].image_src" @click="loadItem(items[4].id)" alt="" class="w-full h-full object-cover object-top cursor-pointer opacity-40 hover:opacity-100">
             </div>
-            <div class="border border-black  w-20 shrink-0"></div>
+            <div class="border border-black  w-20 lg:w-32 shrink-0"></div>
         </div>
     </div>
     <div v-if="isLoading" class="fixed inset-0 z-50 flex items-center justify-center">
