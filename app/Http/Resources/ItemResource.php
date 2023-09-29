@@ -39,23 +39,4 @@ class ItemResource extends JsonResource
         return 'https://mdo.mkg-hamburg.de/MDO/mediadelivery/rendition/' . $this->previewAsset->mdc_id . '/-FJPG-B1000';
     }
 
-    private function getDescription()
-    {
-        if ($this['item']->description) {
-            return nl2br($this['item']->description);
-        }
-
-        return $this->description;
-    }
-
-    private function getAuthor()
-    {
-        if ($this['item']->author_name) {
-            return $this['item']->author_name;
-        }
-
-        return collect($this['webumenia_item']->authors)
-            ->map(fn (string $author) => formatName($author))
-            ->join(', ');
-    }
 }
