@@ -15,6 +15,19 @@ It requires
 1. PHP >= 7.4.x
 1. MySQL >= 5.7
 
+### Installation & local development
+```bash
+composer install
+```
+and then
+```bash
+npm install
+```
+and then
+```bash
+npm run dev
+```
+
 ## License
 
 Source code in this repository is licensed under the MIT license. Please see the [License File](LICENSE) for more information.
