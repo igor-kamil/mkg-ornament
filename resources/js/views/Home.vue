@@ -34,26 +34,30 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { getActiveLanguage, loadLanguageAsync } from 'laravel-vue-i18n'
 import ItemDetail from '../components/ItemDetail.vue'
 
 const router = useRouter()
-const locale = ref('sk')
+const route = useRoute()
+const locale = ref('en')
 
 const items = ref([])
 const isLoading = ref(false)
 const detailActive = ref(false)
 
+let apiUrl = '/api/items/'
+
 onMounted(async () => {
-    locale.value = getActiveLanguage()
-    const response = await axios.get(`/api/items/`)
+    const useParam = route.query.use
+    apiUrl = useParam === 'digicult' ? '/api/items-digicult/' : '/api/items/'
+    const response = await axios.get(`${apiUrl}`)
     items.value = response.data.data
 })
 
 const loadItem = async(id) => {
     isLoading.value = true
-    const response = await axios.get(`/api/items/?id=${id}`)
+    const response = await axios.get(`${apiUrl}?id=${id}`)
     items.value = response.data.data
     isLoading.value = false
 }
