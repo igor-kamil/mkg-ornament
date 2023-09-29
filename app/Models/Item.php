@@ -20,7 +20,7 @@ class Item extends Model
 
     public function previewAsset()
     {
-        return $this->hasOne(ItemAsset::class)->oldest();
+        return $this->hasOne(ItemAsset::class)->orderBy('name');
     }
 
 }
