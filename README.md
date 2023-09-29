@@ -15,15 +15,40 @@ It requires
 1. PHP >= 7.4.x
 1. MySQL >= 5.7
 
+### Database setup
+
+To be added...
+
 ### Installation & local development
+
+save `.env.exampole` as `.env`.
+
+generate an application key:
+
+```bash
+php artisan key:generate
+```
+
+install back end dependencies
+
 ```bash
 composer install
 ```
-and then
+
+run a local back end development server
+
+```bash
+php artisan serve
+```
+
+install front end dependencies
+
 ```bash
 npm install
 ```
-and then
+
+run a local front end development server
+
 ```bash
 npm run dev
 ```
