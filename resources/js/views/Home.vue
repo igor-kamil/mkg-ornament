@@ -83,6 +83,7 @@ const route = useRoute()
 const locale = ref('en')
 
 const items = ref([])
+const viewedItemIds = ref([])
 const isLoading = ref(true)
 const detailActive = ref(false)
 
@@ -95,20 +96,26 @@ onMounted(async () => {
 })
 
 const init = async () => {
+    viewedItemIds.value = []
     isLoading.value = true
     const response = await axios.get(`${apiUrl}`)
-    items.value = response.data.data
-    await loadImages(items.value.map(item => item.image_src))
+    processResponse(response)
     isLoading.value = false
 }
 
 const loadItem = async (id) => {
     isLoading.value = true
-    const response = await axios.get(`${apiUrl}?id=${id}`)
+    const response = await axios.get(`${apiUrl}?id=${id}&exclude=${viewedItemIds.value.join(',')}`)
+    processResponse(response)
+    isLoading.value = false
+}
+
+const processResponse = async (response) => {
     items.value = response.data.data
+    const itemIds = items.value.map(item => item.id);
+    viewedItemIds.value.push(...itemIds);
     // Load all images and then hide loading
     await loadImages(items.value.map(item => item.image_src))
-    isLoading.value = false
 }
 
 const toggleDetail = () => {
