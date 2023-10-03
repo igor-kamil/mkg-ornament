@@ -6,7 +6,7 @@
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-20 h-20 2xl:w-32 2xl:h-32"
+            class="w-20 h-20 md:w-32 md:h-32"
             :class="iconClass"
         >
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
