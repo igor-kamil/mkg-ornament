@@ -62,3 +62,9 @@ Route::get('/items/{id}', function (string $id) {
     return new ItemResource($item);
 });
 
+Route::get('/similar-item/{id}', function ($id, Request $request) {
+    $mainItem = Item::findOrFail($id);
+    $exclude = explode(',' , $request->get('exclude', ''));
+    $similiarItem = Item::has('assets')->where('collection', 'LIKE', $mainItem->collection)->whereNotIn('id', $exclude )->inRandomOrder()->first();
+    return new ItemResource($similiarItem);
+});
