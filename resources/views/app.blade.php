@@ -14,7 +14,7 @@
     <meta name="theme-color" content="#ffffff">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>Objekt forscher</title>
+    <title>Ornament explorer</title>
 </head>
 
 <body class="h-full">
