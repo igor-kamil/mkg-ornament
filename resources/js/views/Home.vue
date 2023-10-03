@@ -65,7 +65,7 @@
             </div>
         </div>
     </div>
-    <div v-if="isLoading" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div v-if="isLoading" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
     </div>
     <ItemDetail :visible="detailActive" @close="toggleDetail" :item="items[2]" />
@@ -98,6 +98,7 @@ const init = async () => {
     isLoading.value = true
     const response = await axios.get(`${apiUrl}`)
     items.value = response.data.data
+    await loadImages(items.value.map(item => item.image_src))
     isLoading.value = false
 }
 
@@ -105,10 +106,26 @@ const loadItem = async (id) => {
     isLoading.value = true
     const response = await axios.get(`${apiUrl}?id=${id}`)
     items.value = response.data.data
+    // Load all images and then hide loading
+    await loadImages(items.value.map(item => item.image_src))
     isLoading.value = false
 }
 
 const toggleDetail = () => {
     detailActive.value = !detailActive.value
 }
+
+const loadImages = (imageSrcArray) => {
+  const promises = imageSrcArray.map(src => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = resolve;
+      img.onerror = reject;
+    });
+  });
+
+  return Promise.all(promises);
+};
+
 </script>
