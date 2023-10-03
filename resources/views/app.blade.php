@@ -18,7 +18,7 @@
 </head>
 
 <body class="h-full">
-    <div id="app" class="bg-white"></div>
+    <div id="app" class="bg-black"></div>
 </body>
 
 </html>
