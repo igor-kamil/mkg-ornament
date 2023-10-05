@@ -22,7 +22,7 @@
                 />
             </div>
             <div
-                class="border-2 border-black grow max-h-[calc(100vh-10rem)] sm:max-hmdcalc(100vh-16rem)] lg:max-h-[calc(100vh-22rem)]"
+                class="border-2 border-black grow h-[calc(100vh-10rem)] sm:h-[calc(100vh-16rem)] lg:h-[calc(100vh-22rem)]"
             >
                 <img
                     @click="toggleDetail()"
