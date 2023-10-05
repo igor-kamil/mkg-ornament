@@ -115,7 +115,7 @@ const init = async () => {
     activeItem.value = 1
     similarItems.value = []
     const response = await axios.get(`${apiUrl}`)
-    processResponse(response)
+    await processResponse(response)
     isLoading.value = false
     loadNextSimilar()
 }
@@ -125,7 +125,7 @@ const loadNextSimilar = async () => {
     const viewedItemIds = similarItems.value.map((item) => item.id).join(',')
     const response = await axios.get(`/api/similar-item/${id}/?exclude=${viewedItemIds}`)
     nextSimilar.value = response.data.data
-    loadImages([nextSimilar.value.image_src])
+    loadNextImage(nextSimilar.value.image_src)
 }
 
 const loadItem = async (id) => {
@@ -179,5 +179,9 @@ const loadImages = (imageSrcArray) => {
     })
 
     return Promise.all(promises)
+}
+
+const loadNextImage = (imageSrc) => {
+    new Image().src = imageSrc;
 }
 </script>
