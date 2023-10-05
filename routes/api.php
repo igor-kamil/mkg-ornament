@@ -31,13 +31,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 Route::get('/items/', function (Request $request) {
     $mainItem =  ($request->has('id')) ? Item::findOrFail($request->input('id')) : Item::has('assets')->inRandomOrder()->first();
-    $similiarItems = Item::has('assets')->where('collection', 'LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
+    $similarItems = $mainItem->getSimilar(2);
     $differentItems = Item::has('assets')->where('collection', 'NOT LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
     $items = collect([
         $differentItems[0],
-        $similiarItems[0],
+        $similarItems[0],
         $mainItem,
-        $similiarItems[1],
+        $similarItems[1],
         $differentItems[1],
     ]);
     return ItemResource::collection($items);
@@ -45,13 +45,13 @@ Route::get('/items/', function (Request $request) {
 
 Route::get('/items-digicult/', function (Request $request) {
     $mainItem =  ($request->has('id')) ? Item::findOrFail($request->input('id')) : Item::whereNotNull('image_src')->inRandomOrder()->first();
-    $similiarItems = Item::whereNotNull('image_src')->where('collection', 'LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
+    $similarItems = Item::whereNotNull('image_src')->where('collection', 'LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
     $differentItems = Item::whereNotNull('image_src')->where('collection', 'NOT LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
     $items = collect([
         $differentItems[0],
-        $similiarItems[0],
+        $similarItems[0],
         $mainItem,
-        $similiarItems[1],
+        $similarItems[1],
         $differentItems[1],
     ]);
     return ItemResourceDigicult::collection($items);
@@ -63,8 +63,8 @@ Route::get('/items/{id}', function (string $id) {
 });
 
 Route::get('/similar-item/{id}', function ($id, Request $request) {
-    $mainItem = Item::findOrFail($id);
+    $item = Item::findOrFail($id);
     $exclude = explode(',' , $request->get('exclude', ''));
-    $similiarItem = Item::has('assets')->where('collection', 'LIKE', $mainItem->collection)->whereNotIn('id', $exclude )->inRandomOrder()->first();
+    $similiarItem = $item->getSimilar(1,$exclude)->first();
     return new ItemResource($similiarItem);
 });
