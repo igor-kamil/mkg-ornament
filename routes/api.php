@@ -40,7 +40,11 @@ Route::get('/items/', function (Request $request) {
         $similarItems[1],
         $differentItems[1],
     ]);
-    return ItemResource::collection($items);
+    return response()->json([ 
+        ItemResource::collection($differentItems[0]->getSimilar(2)->push($differentItems[0])),
+        ItemResource::collection($similarItems->push($mainItem)),
+        ItemResource::collection($differentItems[1]->getSimilar(2)->push($differentItems[1])),
+    ]);
 });
 
 Route::get('/items-digicult/', function (Request $request) {

@@ -5,8 +5,8 @@
             <div class="border-2 border-black grow relative">
                 <navigate-button direction="up"></navigate-button>
                 <img
-                    :src="differentItems[0].image_src"
-                    :alt="differentItems[0].title"
+                    :src="differentItems[0][1].image_src"
+                    :alt="differentItems[0][1].title"
                     class="w-full h-full object-cover object-bottom"
                 />
             </div>
@@ -45,8 +45,8 @@
             <div class="border-2 border-black grow relative">
                 <navigate-button direction="down"></navigate-button>
                 <img
-                    :src="differentItems[1].image_src"
-                    :alt="differentItems[1].title"
+                    :src="differentItems[1][1].image_src"
+                    :alt="differentItems[1][1].title"
                     class="w-full h-full object-cover object-top"
                 />
             </div>
@@ -156,12 +156,10 @@ const moveSimilar = async (direction) => {
 }
 
 const processResponse = async (response) => {
-    const items = response.data.data
-    differentItems.value.push(...[items[0], items[4]])
-    similarItems.value.push(...[items[1], items[2], items[3]])
-    // similarItems.value.push(...items.value)
-    // Load all images and then hide loading
-    await loadImages(response.data.data.map((item) => item.image_src))
+    const items = response.data
+    differentItems.value = [items[0], items[2]]
+    similarItems.value = items[1]
+    await loadImages([...similarItems.value.map((item) => item.image_src), differentItems.value[0][1].image_src, differentItems.value[0][1].image_src])
 }
 
 const toggleDetail = () => {
