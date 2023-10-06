@@ -11,6 +11,7 @@ class Item extends Model
 
     protected $fillable = [
         'image_src',
+        'asset_id',
     ];
 
     public function assets()

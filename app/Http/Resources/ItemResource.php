@@ -34,7 +34,7 @@ class ItemResource extends JsonResource
 
     private function getImageRoute()
     {
-        return 'https://mdo.mkg-hamburg.de/MDO/mediadelivery/rendition/' . $this->previewAsset->mdc_id . '/-FJPG-B1354'; // B1354 -> bounding box 1354px 
+        return 'https://mdo.mkg-hamburg.de/MDO/mediadelivery/rendition/' . $this->asset_id . '/-FJPG-B1354'; // B1354 -> bounding box 1354px 
     }
 
 }
