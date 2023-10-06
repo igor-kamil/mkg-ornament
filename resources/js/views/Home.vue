@@ -1,9 +1,29 @@
 <template>
     <div class="flex w-full h-screen max-h-screen flex-col border-1 border-black" v-if="similarItems.length !== 0">
         <div class="flex bg-white h-20 sm:h-32 md:h-48 shrink-0">
-            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0"></div>
+            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
+                <button
+                    class="flex items-center justify-center text-gray-medium absolute inset-0 z-10 hover:text-white/60 w-full"
+                    @click="init"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-20 h-20 md:w-24 md:h-24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+                        />
+                    </svg>
+                </button>
+            </div>
             <div class="border-1 border-black grow relative">
-                <navigate-button @click="moveSimilar('up')"  direction="up"></navigate-button>
+                <navigate-button @click="moveSimilar('up')" direction="up"></navigate-button>
                 <img
                     :src="differentItems[0][1].image_src"
                     :alt="differentItems[0][1].title"
@@ -41,7 +61,9 @@
             </div>
         </div>
         <div class="flex bg-white h-20 sm:h-32 md:h-48 shrink-0">
-            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0"></div>
+            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
+                
+            </div>
             <div class="border-1 border-black grow relative">
                 <navigate-button @click="moveSimilar('down')" direction="down"></navigate-button>
                 <img
@@ -151,13 +173,13 @@ const moveSimilar = async (direction) => {
         case 'up':
             differentItems.value[0] = similarItems.value
             similarItems.value = differentItems.value[1]
-            activeItem.value=1
+            activeItem.value = 1
             differentItems.value[1] = nextDifferent.value
             break
         case 'down':
             differentItems.value[1] = similarItems.value
             similarItems.value = differentItems.value[0]
-            activeItem.value=1
+            activeItem.value = 1
             differentItems.value[0] = nextDifferent.value
             break
         case 'left':
@@ -212,5 +234,4 @@ const loadImages = (imageSrcArray) => {
 
     return Promise.all(promises)
 }
-
 </script>
