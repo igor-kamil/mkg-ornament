@@ -52,7 +52,7 @@
             </div>
             <div class="border-2 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <button
-                    class="flex items-center justify-center text-white absolute inset-0 z-10 hover:text-white/60"
+                    class="flex items-center justify-center text-white absolute inset-0 z-10 hover:text-white/60 w-full"
                     @click="init"
                 >
                     <svg

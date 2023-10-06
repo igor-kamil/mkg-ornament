@@ -1,5 +1,5 @@
 <template>
-    <button class="flex items-center justify-center text-white absolute inset-0 z-10 bg-black/30 hover:bg-black/60">
+    <button class="flex items-center justify-center text-white absolute inset-0 z-10 bg-black/30 hover:bg-black/60 w-full">
         <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
