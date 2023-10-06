@@ -20,7 +20,7 @@ class ImportAssets extends Command
      *
      * @var string
      */
-    protected $signature = 'import:assets {file}';
+    protected $signature = 'import:assets {file} {--tif}';
 
     /**
      * The console command description.
@@ -49,23 +49,27 @@ class ImportAssets extends Command
         $filePath = $this->argument('file');
 
         // Read the CSV file using spatie/simple-excel
-        $rows = SimpleExcelReader::create($filePath)->getRows();
+        $rows = SimpleExcelReader::create($filePath)->useDelimiter(';')->getRows();
 
         $rows->each(function (array $row) {
             try {
-                ItemAsset::upsert([
-                    'id' => Arr::get($row, 'lfd. Nr.'),
-                    'name' => Arr::get($row, 'Asset-Name'),
-                    'mdc_id' => Arr::get($row, 'Media Delivery Cloud Asset ID'),
-                    'item_id' => Arr::get($row, 'dc_Inventarnummer'),
-                ], ['id']);
+                if (Str::endsWith(Arr::get($row, 'Asset-Name'), '.jpg') && !Str::contains(Arr::get($row, 'Asset-Name'), '+')) {
+                    $id = Str::remove('.jpg', Arr::get($row, 'Asset-Name'));
+                    Item::where('id', $id)->update(['asset_id' => Arr::get($row, 'Media Delivery Cloud Asset ID')]);
+                }
+                if ($this->option('tif') && Str::endsWith(Arr::get($row, 'Asset-Name'), '.tif') && !Str::contains(Arr::get($row, 'Asset-Name'), '+')) {
+                    $id = Str::remove('.tif', Arr::get($row, 'Asset-Name'));
+                    $item = Item::whereNull('asset_id')->where('id', $id)->first();
+                    if ($item) {
+                        Item::where('id', $id)->update(['asset_id' => Arr::get($row, 'Media Delivery Cloud Asset ID')]);
+                    }
+
+                }
             } catch (QueryException $e) {
                 // Log the exception and continue with the next row
                 Log::error('Error processing item: ' . Arr::get($row, 'Inventarnummer'));
                 Log::error('Exception: ' . $e->getMessage());
             }
-            // in the first pass $rowProperties will contain
-            // ['email' => 'john@example.com', 'first_name' => 'john']
         });
 
         $this->info('Assets imported successfully.');
