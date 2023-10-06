@@ -3,7 +3,7 @@
         <div class="flex bg-black h-20 sm:h-32 md:h-48 shrink-0">
             <div class="border-2 border-black w-20 sm:w-32 md:w-48 shrink-0"></div>
             <div class="border-2 border-black grow relative">
-                <navigate-button direction="up"></navigate-button>
+                <navigate-button @click="moveSimilar('up')"  direction="up"></navigate-button>
                 <img
                     :src="differentItems[0][1].image_src"
                     :alt="differentItems[0][1].title"
@@ -43,7 +43,7 @@
         <div class="flex bg-black h-20 sm:h-32 md:h-48 shrink-0">
             <div class="border-2 border-black w-20 sm:w-32 md:w-48 shrink-0"></div>
             <div class="border-2 border-black grow relative">
-                <navigate-button direction="down"></navigate-button>
+                <navigate-button @click="moveSimilar('down')" direction="down"></navigate-button>
                 <img
                     :src="differentItems[1][1].image_src"
                     :alt="differentItems[1][1].title"
@@ -101,6 +101,7 @@ const detailActive = ref(false)
 const activeItem = ref(1)
 
 const nextSimilar = ref(null)
+const nextDifferent = ref([])
 
 let apiUrl = '/api/items/'
 
@@ -118,6 +119,7 @@ const init = async () => {
     await processResponse(response)
     isLoading.value = false
     loadNextSimilar()
+    loadNextDifferent()
 }
 
 const loadNextSimilar = async () => {
@@ -126,6 +128,13 @@ const loadNextSimilar = async () => {
     const response = await axios.get(`/api/similar-item/${id}/?exclude=${viewedItemIds}`)
     nextSimilar.value = response.data.data
     loadImages([nextSimilar.value.image_src])
+}
+
+const loadNextDifferent = async () => {
+    const id = similarItems.value[activeItem.value].id
+    const response = await axios.get(`/api/different-items/${id}`)
+    nextDifferent.value = response.data
+    loadImages(nextDifferent.value.map((item) => item.image_src))
 }
 
 const loadItem = async (id) => {
@@ -139,20 +148,35 @@ const moveSimilar = async (direction) => {
     // move pointer to "active"
     isLoading.value = true
     switch (direction) {
+        case 'up':
+            differentItems.value[0] = similarItems.value
+            similarItems.value = differentItems.value[1]
+            activeItem.value=1
+            differentItems.value[1] = nextDifferent.value
+            break
+        case 'down':
+            differentItems.value[1] = similarItems.value
+            similarItems.value = differentItems.value[0]
+            activeItem.value=1
+            differentItems.value[0] = nextDifferent.value
+            break
         case 'left':
             similarItems.value.unshift(nextSimilar.value)
             activeItem.value--
-        default:
+            break
+        case 'right':
             similarItems.value.push(nextSimilar.value)
             activeItem.value++
+            break
     }
 
     isLoading.value = false
     loadNextSimilar()
+    loadNextDifferent()
     // const itemIds = similarItems.value.map(item => item.id);
     // const response = await axios.get(`${apiUrl}?id=${id}&exclude=${similarItems.value.join(',')}`)
     // processResponse(response)
-    // isLoading.value = false
+    isLoading.value = false
 }
 
 const processResponse = async (response) => {

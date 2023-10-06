@@ -32,7 +32,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 Route::get('/items/', function (Request $request) {
     $mainItem =  ($request->has('id')) ? Item::findOrFail($request->input('id')) : Item::has('assets')->inRandomOrder()->first();
     $similarItems = $mainItem->getSimilar(2);
-    $differentItems = Item::has('assets')->where('collection', 'NOT LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
+    $differentItems = Item::has('assets')->where('collection', 'NOT LIKE', $mainItem->collection)->inRandomOrder()->limit(2)->get();
     $items = collect([
         $differentItems[0],
         $similarItems[0],
@@ -71,4 +71,14 @@ Route::get('/similar-item/{id}', function ($id, Request $request) {
     $exclude = explode(',' , $request->get('exclude', ''));
     $similiarItem = $item->getSimilar(1,$exclude)->first();
     return new ItemResource($similiarItem);
+});
+
+Route::get('/different-items/{id}', function ($id, Request $request) {
+    $item = Item::findOrFail($id);
+    $exclude = explode(',' , $request->get('exclude', ''));
+    $differentItem = Item::has('assets')->where('collection', 'NOT LIKE', $item->collection)->inRandomOrder()->first();
+    // $similiarItem = $item->getSimilar(1,$exclude)->first();
+    return response()->json(
+        ItemResource::collection($differentItem->getSimilar(2)->push($differentItem)),
+    );
 });
