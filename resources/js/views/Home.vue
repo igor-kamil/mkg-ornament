@@ -1,8 +1,8 @@
 <template>
-    <div class="flex w-full h-screen max-h-screen flex-col border-2 border-black" v-if="similarItems.length !== 0">
-        <div class="flex bg-black h-20 sm:h-32 md:h-48 shrink-0">
-            <div class="border-2 border-black w-20 sm:w-32 md:w-48 shrink-0"></div>
-            <div class="border-2 border-black grow relative">
+    <div class="flex w-full h-screen max-h-screen flex-col border-1 border-black" v-if="similarItems.length !== 0">
+        <div class="flex bg-white h-20 sm:h-32 md:h-48 shrink-0">
+            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0"></div>
+            <div class="border-1 border-black grow relative">
                 <navigate-button @click="moveSimilar('up')"  direction="up"></navigate-button>
                 <img
                     :src="differentItems[0][1].image_src"
@@ -10,10 +10,10 @@
                     class="w-full h-full object-cover object-bottom"
                 />
             </div>
-            <div class="border-2 border-black w-20 sm:w-32 md:w-48 shrink-0"></div>
+            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0"></div>
         </div>
-        <div class="flex bg-black grow">
-            <div class="border-2 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
+        <div class="flex bg-white grow">
+            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <navigate-button @click="moveSimilar('left')" direction="left"></navigate-button>
                 <img
                     :src="similarItems[activeItem - 1].image_src"
@@ -22,7 +22,7 @@
                 />
             </div>
             <div
-                class="border-2 border-black grow h-[calc(100vh-10rem)] sm:h-[calc(100vh-16rem)] md:h-[calc(100vh-24rem)]"
+                class="border-1 border-black grow h-[calc(100vh-10rem)] sm:h-[calc(100vh-16rem)] md:h-[calc(100vh-24rem)]"
             >
                 <img
                     @click="toggleDetail()"
@@ -31,7 +31,7 @@
                     class="w-full h-full object-cover cursor-pointer"
                 />
             </div>
-            <div class="border-2 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
+            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <navigate-button @click="moveSimilar('right')" direction="right"></navigate-button>
                 <img
                     :src="similarItems[activeItem + 1].image_src"
@@ -40,9 +40,9 @@
                 />
             </div>
         </div>
-        <div class="flex bg-black h-20 sm:h-32 md:h-48 shrink-0">
-            <div class="border-2 border-black w-20 sm:w-32 md:w-48 shrink-0"></div>
-            <div class="border-2 border-black grow relative">
+        <div class="flex bg-white h-20 sm:h-32 md:h-48 shrink-0">
+            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0"></div>
+            <div class="border-1 border-black grow relative">
                 <navigate-button @click="moveSimilar('down')" direction="down"></navigate-button>
                 <img
                     :src="differentItems[1][1].image_src"
@@ -50,9 +50,9 @@
                     class="w-full h-full object-cover object-top"
                 />
             </div>
-            <div class="border-2 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
+            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <button
-                    class="flex items-center justify-center text-white absolute inset-0 z-10 hover:text-white/60 w-full"
+                    class="flex items-center justify-center text-gray-medium absolute inset-0 z-10 hover:text-white/60 w-full"
                     @click="init"
                 >
                     <svg
@@ -63,7 +63,7 @@
                         stroke="currentColor"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="w-20 h-20 lg:w-32 lg:h-32"
+                        class="w-20 h-20 md:w-24 md:h-24"
                     >
                         <path
                             d="M1.38251 7.66051C1.38251 7.66051 2.80119 7.66051 5.55509 7.66051C8.309 7.66051 9.72768 9.32955 9.72768 9.32955M22.2454 16.4229C22.2454 16.4229 21.6613 16.4229 18.9074 16.4229C16.1535 16.4229 14.1506 14.0863 14.1506 14.0863M22.2454 16.4229L19.0743 19.5941M22.2454 16.4229L19.0743 13.2518"
@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
-    <div v-if="isLoading" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div v-if="isLoading" class="fixed inset-0 z-50 flex items-center justify-center bg-white/50">
         <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
     </div>
     <ItemDetail :visible="detailActive" @close="toggleDetail" :item="similarItems[activeItem]" />
