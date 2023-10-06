@@ -125,19 +125,19 @@ const activeItem = ref(1)
 const nextSimilar = ref(null)
 const nextDifferent = ref([])
 
-let apiUrl = '/api/items/'
+const apiUrl = '/api/items/'
 
 onMounted(async () => {
-    const useParam = route.query.use
-    apiUrl = useParam === 'digicult' ? '/api/items-digicult/' : '/api/items/'
-    init()
+    // apiUrl = useParam === 'digicult' ? '/api/items-digicult/' : '/api/items/'
+    const itemId = route.query.id ?? null
+    init(itemId)
 })
 
-const init = async () => {
+const init = async (id = null) => {
     isLoading.value = true
     activeItem.value = 1
     similarItems.value = []
-    const response = await axios.get(`${apiUrl}`)
+    const response = await axios.get(apiUrl + ((id!==null) ? `?id=${id}` : ''))
     await processResponse(response)
     isLoading.value = false
     loadNextSimilar()

@@ -33,16 +33,10 @@ Route::get('/items/', function (Request $request) {
     $mainItem =  ($request->has('id')) ? Item::findOrFail($request->input('id')) : Item::whereNotNull('asset_id')->inRandomOrder()->first();
     $similarItems = $mainItem->getSimilar(2);
     $differentItems = Item::whereNotNull('asset_id')->where('collection', 'NOT LIKE', $mainItem->collection)->inRandomOrder()->limit(2)->get();
-    $items = collect([
-        $differentItems[0],
-        $similarItems[0],
-        $mainItem,
-        $similarItems[1],
-        $differentItems[1],
-    ]);
+    
     return response()->json([ 
         ItemResource::collection($differentItems[0]->getSimilar(2)->push($differentItems[0])),
-        ItemResource::collection($similarItems->push($mainItem)),
+        ItemResource::collection([$similarItems[0], $mainItem, $similarItems[1]]),
         ItemResource::collection($differentItems[1]->getSimilar(2)->push($differentItems[1])),
     ]);
 });
