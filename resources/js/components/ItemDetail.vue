@@ -2,15 +2,14 @@
     <div class="fixed inset-0 z-50 flex justify-center items-center" v-if="visible">
         <div class="bg-black opacity-70 absolute inset-0 cursor-zoom-out" @click="emit('close')" />
         <div class="max-h-full overflow-y-auto overflow-x-hidden p-4">
-            <div class="relative w-full max-w-4xl bg-white rounded-xl">
-                <img :src="item.image_src" :alt="item.title" class="w-full rounded-t-xl" />
-                <div class="px-4 py-6">
-                    <h3 class="text-gray-dark text-base" v-if="item.collection">
-                        collection:
-                        {{ item.collection }}
+            <div class="relative w-full max-w-3xl bg-white rounded-xl">
+                <img :src="item.image_src" :alt="item.title" class="w-full rounded-t-xl max-h-[calc(100vh-34rem)]" />
+                <div class="px-4 py-6 md:px-6">
+                    <h3 class="text-gray-dark text-2xl mb-1" v-if="item.object">
+                        {{ item.object }}
                     </h3>
-                    <h2 class="text-xl font-bold">{{ item.title }}</h2>
-                    <h3 class="text-gray-dark text-base">
+                    <h2 class="text-4xl font-bold  mb-1">{{ item.title }}</h2>
+                    <h3 class="text-gray-dark text-2xl">
                         <span v-if="item.author">{{ item.author }} · </span>
                         {{ item.year_from }}
                     </h3>
@@ -26,7 +25,7 @@
                                 <div class="flex">
                                     <div class="mx-3 self-center">
                                         <div class="font-bold">Open this object</div>
-                                        <div class="text-sm">in MK&G Online Collection</div>
+                                        <div class="text-base">in MK&G Online Collection</div>
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +42,7 @@
                             </div>
                         </div>
                     </a>
-                    <ConfirmButton class="bg-black text-white my-4" @click="emit('close')">Schließen</ConfirmButton>
+                    <ConfirmButton class="bg-black text-white my-4 text-4xl" @click="emit('close')">Schließen</ConfirmButton>
                 </div>
             </div>
         </div>

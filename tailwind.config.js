@@ -50,17 +50,6 @@ module.exports = {
         fontFamily: {
             sans: ['Scto Grotesk A', 'sans-serif'],
         },
-        fontSize: {
-            sm: ['14px'],
-            base: ['18px'],
-            lg: ['20px'],
-            xl: ['22px'],
-            '2xl': ['24px'],
-        },
-        fontWeight: {
-            normal: '400',
-            bold: '700',
-        },
     },
     corePlugins: {
         aspectRatio: false,
