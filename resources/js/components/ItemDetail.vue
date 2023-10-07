@@ -2,23 +2,23 @@
     <div class="fixed inset-0 z-50 flex justify-center items-center" v-if="visible">
         <div class="bg-black opacity-70 absolute inset-0 cursor-zoom-out" @click="emit('close')" />
         <div class="max-h-full overflow-y-auto overflow-x-hidden p-4">
-            <div class="relative w-full max-w-3xl bg-white rounded-xl">
-                <img :src="item.image_src" :alt="item.title" class="w-full rounded-t-xl max-h-[calc(100vh-20rem)] md:max-h-[calc(100vh-34rem)] object-contain" />
-                <div class="px-4 py-6 md:px-6">
+            <div class="relative w-full max-w-2xl md:max-w-3xl bg-white rounded-xl">
+                <img :src="item.image_src" :alt="item.title" class="w-full rounded-t-xl max-h-[calc(100dvh-20rem)] md:max-h-[calc(100dvh-34rem)] object-contain" />
+                <div class="px-4 py-4 md:py-6 md:px-6">
                     <h3 class="text-gray-dark text-lg md:text-2xl mb-1" v-if="item.object">
                         {{ item.object }}
                     </h3>
                     <h2 class="text-xl md:text-4xl font-bold  mb-1">{{ item.title }}</h2>
-                    <h3 class="text-gray-dark text-lg md:text-2xl">
+                    <h3 class="text-gray-dark text-lg md:text-2xl mb-4">
                         <span v-if="item.author">{{ item.author }}</span>
                         <span v-if="item.author && item.dating"> · </span>
                         <span v-if="item.dating">{{ item.dating }}</span>
                     </h3>
-                    <div class="py-4" v-html="item.description"></div>
+                    <div class="pb-4" v-if="item.description" v-html="item.description"></div>
                     <a
                         :href="item.web_url"
                         target="_blank"
-                        class="bg-gray-softest border-2 border-black p-2.5 rounded-xl block"
+                        class="bg-gray-softest border-2 border-black p-2.5 rounded-xl block mb-4"
                         v-if="item.web_url"
                     >
                         <div class="flex cursor-pointer">

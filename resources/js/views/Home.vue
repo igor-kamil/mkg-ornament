@@ -1,5 +1,5 @@
 <template>
-    <div class="flex w-full h-screen max-h-screen flex-col border-1 border-black" v-if="similarItems.length !== 0">
+    <div class="flex w-full h-[100dvh] max-h-[100dvh] flex-col border-1 border-black" v-if="similarItems.length !== 0">
         <div class="flex bg-white h-20 sm:h-32 md:h-48 shrink-0">
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <button
@@ -29,7 +29,7 @@
                 />
             </div>
             <div
-                class="border-1 border-black grow h-[calc(100vh-10rem)] sm:h-[calc(100vh-16rem)] md:h-[calc(100vh-24rem)]"
+                class="border-1 border-black grow h-[calc(100dvh-10rem)] sm:h-[calc(100dvh-16rem)] md:h-[calc(100dvh-24rem)]"
             >
                 <img
                     @click="toggleDetail()"
