@@ -3,8 +3,8 @@
         <div class="flex bg-white h-20 sm:h-32 md:h-48 shrink-0">
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <button
-                    class="flex items-center justify-center text-gray-medium absolute inset-0 z-10 hover:text-white/60 w-full text-3xl md:text-8xl"
-                    @click="init"
+                    class="flex items-center justify-center text-gray-medium absolute inset-0 z-10 hover:text-gray-dark w-full text-3xl md:text-8xl"
+                    @click="init()"
                 >
                     ?
                 </button>
@@ -59,8 +59,8 @@
             </div>
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <button
-                    class="flex items-center justify-center text-gray-medium absolute inset-0 z-10 hover:text-white/60 w-full"
-                    @click="init"
+                    class="flex items-center justify-center text-gray-medium absolute inset-0 z-10 hover:text-gray-dark w-full"
+                    @click="init()"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +79,7 @@
         </div>
     </div>
     <div v-if="isLoading" class="fixed inset-0 z-50 flex items-center justify-center bg-white/50">
-        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
+        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-dark"></div>
     </div>
     <ItemDetail :visible="detailActive" @close="toggleDetail" :item="similarItems[activeItem]" />
 </template>
