@@ -155,29 +155,35 @@ const moveSimilar = async (direction) => {
             similarItems.value = differentItems.value[0]
             differentItems.value[0] = nextDifferent.value
             activeItem.value = 1
+            loadNextSimilar()
+            loadNextDifferent()
             break
         case 'down':
             differentItems.value[0] = [similarItems.value[activeItem.value-1], similarItems.value[activeItem.value], similarItems.value[activeItem.value+1]]
             similarItems.value = differentItems.value[1]
             differentItems.value[1] = nextDifferent.value
             activeItem.value = 1
+            loadNextSimilar()
+            loadNextDifferent()
             break
         case 'left':
-            similarItems.value.unshift(nextSimilar.value)
-            activeItem.value--
+            if (activeItem.value > 2) {
+                activeItem.value--
+            } else {
+                similarItems.value.unshift(nextSimilar.value)
+                loadNextSimilar()
+            }
             break
         case 'right':
-            similarItems.value.push(nextSimilar.value)
+            if (activeItem.value == similarItems.value.length - 2) {
+                console.log('ale som')
+                similarItems.value.push(nextSimilar.value)
+                loadNextSimilar()
+            }
             activeItem.value++
             break
     }
 
-    isLoading.value = false
-    loadNextSimilar()
-    loadNextDifferent()
-    // const itemIds = similarItems.value.map(item => item.id);
-    // const response = await axios.get(`${apiUrl}?id=${id}&exclude=${similarItems.value.join(',')}`)
-    // processResponse(response)
     isLoading.value = false
 }
 
