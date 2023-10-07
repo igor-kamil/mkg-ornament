@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Airtable;
 use App\Models\Item;
+use Illuminate\Support\Facades\File;
 use App\Models\Exhibition;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -26,7 +27,7 @@ class ImportItems extends Command
      *
      * @var string
      */
-    protected $description = 'Import items from a CSV file';
+    protected $description = 'Import items from a CSV file or folder containing CSV files';
 
     /**
      * Create a new command instance.
@@ -46,8 +47,21 @@ class ImportItems extends Command
     public function handle()
     {
         $filePath = $this->argument('file');
+        if (File::isDirectory($filePath)) {
+            $csvFiles = glob($filePath . '/*.csv');
+            foreach ($csvFiles as $csvFile) {
+                $this->importFile($csvFile);
+            }
+        } else {
+            $this->importFile($filePath);
+        }
+        $this->info('Items imported successfully.');
+    }
 
-        // Read the CSV file using spatie/simple-excel
+    private function importFile($filePath)
+    {
+        $filename = pathinfo($filePath, PATHINFO_FILENAME);
+        $this->info("Importing data from: $filename");
         $rows = SimpleExcelReader::create($filePath)->useDelimiter(';')->getRows();
 
         $rows->each(function (array $row) {
@@ -67,6 +81,7 @@ class ImportItems extends Command
                     'collection' => Arr::get($row, 'Sammlung'),
                     'year_from' => Arr::get($row, 'Datierung von'),
                     'year_to' => Arr::get($row, 'Datierung bis'),
+                    'acquisition_date' => Arr::get($row, 'Zugangsdatum'),
                 ], ['id']);
             } catch (QueryException $e) {
                 // Log the exception and continue with the next row
@@ -76,7 +91,5 @@ class ImportItems extends Command
             // in the first pass $rowProperties will contain
             // ['email' => 'john@example.com', 'first_name' => 'john']
         });
-
-        $this->info('Items imported successfully.');
     }
 }
