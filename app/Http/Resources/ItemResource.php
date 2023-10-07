@@ -27,8 +27,7 @@ class ItemResource extends JsonResource
             'web_url' => $this->web_url,
             'collection' => $this->collection,
             'object' => $this->object,
-            'year_from' => $this->year_from,
-            'year_to' => $this->year_to
+            'dating' => $this->dating,
         ];
     }
 

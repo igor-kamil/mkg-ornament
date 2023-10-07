@@ -10,8 +10,9 @@
                     </h3>
                     <h2 class="text-4xl font-bold  mb-1">{{ item.title }}</h2>
                     <h3 class="text-gray-dark text-2xl">
-                        <span v-if="item.author">{{ item.author }} · </span>
-                        {{ item.year_from }}
+                        <span v-if="item.author">{{ item.author }}</span>
+                        <span v-if="item.author && item.dating"> · </span>
+                        <span v-if="item.dating">{{ item.dating }}</span>
                     </h3>
                     <div class="py-4" v-html="item.description"></div>
                     <a
