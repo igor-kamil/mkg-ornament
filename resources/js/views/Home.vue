@@ -151,16 +151,16 @@ const moveSimilar = async (direction) => {
     isLoading.value = true
     switch (direction) {
         case 'up':
-            differentItems.value[0] = similarItems.value
-            similarItems.value = differentItems.value[1]
+            differentItems.value[1] = [similarItems.value[activeItem.value-1], similarItems.value[activeItem.value], similarItems.value[activeItem.value+1]]
+            similarItems.value = differentItems.value[0]
+            differentItems.value[0] = nextDifferent.value
             activeItem.value = 1
-            differentItems.value[1] = nextDifferent.value
             break
         case 'down':
-            differentItems.value[1] = similarItems.value
-            similarItems.value = differentItems.value[0]
+            differentItems.value[0] = [similarItems.value[activeItem.value-1], similarItems.value[activeItem.value], similarItems.value[activeItem.value+1]]
+            similarItems.value = differentItems.value[1]
+            differentItems.value[1] = nextDifferent.value
             activeItem.value = 1
-            differentItems.value[0] = nextDifferent.value
             break
         case 'left':
             similarItems.value.unshift(nextSimilar.value)
