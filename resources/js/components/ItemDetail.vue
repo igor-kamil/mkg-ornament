@@ -3,7 +3,7 @@
         <div class="bg-black opacity-70 absolute inset-0 cursor-zoom-out" @click="emit('close')" />
         <div class="max-h-full overflow-y-auto overflow-x-hidden p-4">
             <div class="relative w-full max-w-3xl bg-white rounded-xl">
-                <img :src="item.image_src" :alt="item.title" class="w-full rounded-t-xl max-h-[calc(100vh-34rem)]" />
+                <img :src="item.image_src" :alt="item.title" class="w-full rounded-t-xl max-h-[calc(100vh-34rem)] object-contain" />
                 <div class="px-4 py-6 md:px-6">
                     <h3 class="text-gray-dark text-2xl mb-1" v-if="item.object">
                         {{ item.object }}
