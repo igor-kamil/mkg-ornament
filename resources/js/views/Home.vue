@@ -3,23 +3,10 @@
         <div class="flex bg-white h-20 sm:h-32 md:h-48 shrink-0">
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <button
-                    class="flex items-center justify-center text-gray-medium absolute inset-0 z-10 hover:text-white/60 w-full"
+                    class="flex items-center justify-center text-gray-medium absolute inset-0 z-10 hover:text-white/60 w-full text-3xl md:text-8xl"
                     @click="init"
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-20 h-20 md:w-24 md:h-24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
-                        />
-                    </svg>
+                    ?
                 </button>
             </div>
             <div class="border-1 border-black grow relative">
@@ -61,9 +48,7 @@
             </div>
         </div>
         <div class="flex bg-white h-20 sm:h-32 md:h-48 shrink-0">
-            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
-                
-            </div>
+            <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative"></div>
             <div class="border-1 border-black grow relative">
                 <navigate-button @click="moveSimilar('down')" direction="down"></navigate-button>
                 <img
@@ -79,19 +64,14 @@
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
+                        class="w-9 h-9 md:w-24 md:h-24"
+                        xml:space="preserve"
+                        viewBox="0 0 64 64"
                         stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="w-20 h-20 md:w-24 md:h-24"
+                        fill="currentColor"
                     >
                         <path
-                            d="M1.38251 7.66051C1.38251 7.66051 2.80119 7.66051 5.55509 7.66051C8.309 7.66051 9.72768 9.32955 9.72768 9.32955M22.2454 16.4229C22.2454 16.4229 21.6613 16.4229 18.9074 16.4229C16.1535 16.4229 14.1506 14.0863 14.1506 14.0863M22.2454 16.4229L19.0743 19.5941M22.2454 16.4229L19.0743 13.2518"
-                        />
-                        <path
-                            d="M1.38251 16.5064C1.38251 16.5064 1.71664 16.5064 3.63587 16.5064C5.55509 16.5064 7.22413 16.5064 9.64423 14.0863C12.0643 11.6662 12.7319 11.082 14.401 9.413C16.07 7.74396 17.6556 7.57706 19.4915 7.57706C21.3275 7.57706 22.2454 7.57706 22.2454 7.57706M22.2454 7.57706L19.0743 4.40589M22.2454 7.57706L19.0743 10.7482"
+                            d="m24.293 26.707 1.414-1.414L15.414 15H0v2h14.586zM55.293 9.707 60.586 15h-14l-32 32H0v2h15.414l32-32h13.172l-5.293 5.293 1.561 1.414 7.146-7v-1.414l-7.146-7zM55.293 41.707 60.586 47H47.414l-9.707-9.707-1.414 1.414L46.586 49h14l-5.293 5.293 1.561 1.414 7.146-7v-1.414l-7.146-7z"
                         />
                     </svg>
                 </button>
@@ -105,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getActiveLanguage, loadLanguageAsync } from 'laravel-vue-i18n'
 import ItemDetail from '../components/ItemDetail.vue'
@@ -137,7 +117,7 @@ const init = async (id = null) => {
     isLoading.value = true
     activeItem.value = 1
     similarItems.value = []
-    const response = await axios.get(apiUrl + ((id!==null) ? `?id=${id}` : ''))
+    const response = await axios.get(apiUrl + (id !== null ? `?id=${id}` : ''))
     await processResponse(response)
     isLoading.value = false
     loadNextSimilar()
