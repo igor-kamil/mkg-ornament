@@ -3,47 +3,38 @@
         <div class="bg-black opacity-70 absolute inset-0 cursor-zoom-out" @click="emit('close')" />
         <div class="max-h-full overflow-y-auto overflow-x-hidden p-4">
             <div class="relative w-full max-w-2xl md:max-w-3xl bg-white rounded-xl">
-                <img :src="item.image_src" :alt="item.title" class="w-full rounded-t-xl max-h-[calc(100dvh-20rem)] md:max-h-[calc(100dvh-34rem)] object-contain" />
+                <img
+                    :src="item.image_src"
+                    :alt="item.title"
+                    class="w-full rounded-t-xl max-h-[calc(100dvh-20rem)] md:max-h-[calc(100dvh-34rem)] object-contain"
+                />
                 <div class="px-4 py-4 md:py-6 md:px-6">
                     <h3 class="text-gray-dark text-lg md:text-2xl mb-1" v-if="item.object">
                         {{ item.object }}
                     </h3>
-                    <h2 class="text-xl md:text-4xl font-bold  mb-1">{{ item.title }}</h2>
+                    <h2 class="text-xl md:text-4xl font-bold mb-1">{{ item.title }}</h2>
                     <h3 class="text-gray-dark text-lg md:text-2xl mb-4">
                         <span v-if="item.author">{{ item.author }}</span>
                         <span v-if="item.author && item.dating"> · </span>
                         <span v-if="item.dating">{{ item.dating }}</span>
                     </h3>
                     <div class="pb-4" v-if="item.description" v-html="item.description"></div>
-                    <a
-                        :href="item.web_url"
-                        target="_blank"
-                        class="bg-gray-softest border-2 border-black p-2.5 rounded-xl block mb-4"
-                        v-if="item.web_url"
-                    >
-                        <div class="flex cursor-pointer">
-                            <div class="grow">
-                                <div class="flex">
-                                    <div class="mx-3 self-center">
-                                        <div class="font-bold">Open this object</div>
-                                        <div class="text-base">in MK&G Online Collection</div>
-                                    </div>
+
+                    <div class="flex p-2 md:p-4 border-black border-1 mb-4 rounded-xl" v-if="item.web_url">
+                        <img :src="qrCode" class="w-20 h-20 md:w-32 md:h-32" alt="open in collection online" />
+                        <div class="grow">
+                            <div class="flex">
+                                <div class="ml-3 md:ml-4 self-center">
+                                    <div class="font-bold">Scannen Sie den Code, um das Objekt zu öffnen</div>
+                                    <div class="text-base">in MK&G Sammlung Online</div>
+                                    <div class="text-xs"><i>{{ item.web_url }}</i></div>
                                 </div>
                             </div>
-                            <div>
-                                <svg
-                                    class="fill-none h-[20px] w-[20px] stroke-2 stroke-black [stroke-linecap:round] [stroke-linejoin:round]"
-                                >
-                                    <path d="M18.25 7.375V1.75H12.625" />
-                                    <path d="M11.5 8.5L18.25 1.75" />
-                                    <path
-                                        d="M15.25 11.5V17.5C15.25 17.6989 15.171 17.8897 15.0303 18.0303C14.8897 18.171 14.6989 18.25 14.5 18.25H2.5C2.30109 18.25 2.11032 18.171 1.96967 18.0303C1.82902 17.8897 1.75 17.6989 1.75 17.5V5.5C1.75 5.30109 1.82902 5.11032 1.96967 4.96967C2.11032 4.82902 2.30109 4.75 2.5 4.75H8.5"
-                                    />
-                                </svg>
-                            </div>
                         </div>
-                    </a>
-                    <ConfirmButton class="bg-black text-white my-2 md:my-4 text-lg md:text-2xl" @click="emit('close')">Schließen</ConfirmButton>
+                    </div>
+                    <ConfirmButton class="bg-black text-white my-2 md:my-4 text-lg md:text-2xl" @click="emit('close')"
+                        >Schließen</ConfirmButton
+                    >
                 </div>
             </div>
         </div>
@@ -51,11 +42,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import ConfirmButton from './ConfirmButton.vue'
 const props = defineProps({
     visible: Boolean,
     item: Object,
 })
 const emit = defineEmits(['close'])
+const qrCode = computed(() => {
+    return `/qrcode/${props.item.id}.svg`
+})
 </script>

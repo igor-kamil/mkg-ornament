@@ -22,7 +22,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 Route::get('/qrcode/{id}.svg', function ($id) {
     $item = Item::findOrFail($id);
-    $qrCode = QrCode::size(300)->generate($item->web_url);
+    $qrCode = QrCode::size(128)->generate($item->web_url . '?utm_source=ornament-explorer');
     return response($qrCode)
         ->header('Content-Type', 'image/svg+xml')
         ->header('Cache-Control', 'max-age=15552000');
