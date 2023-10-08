@@ -1,12 +1,13 @@
 <?php
 
-use App\Jobs\ImportExhibitionsJob;
-use App\Jobs\ImportAuthoritiesJob;
 use App\Models\Item;
 use App\Models\Section;
 use Illuminate\Http\Request;
+use App\Jobs\ImportAuthoritiesJob;
+use App\Jobs\ImportExhibitionsJob;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,37 +20,13 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
-Route::get('/items', function (Request $request) {
-    $items = Item::with('code', 'code.exhibition')->get()->sortBy(function ($item) {
-        return $item->code->exhibition_id;
-    });
-    return response()->view('items', compact('items'));
-});
-
-Route::get('/sections', function () {
-    $sections = Section::with('code', 'code.exhibition')->get()->sortBy(function ($section) {
-        return $section->code->exhibition_id;
-    });
-    return response()->view('sections', compact('sections'));
-});
-
-Route::get('/img/{code}.svg', function (Request $request, $code) {
-    $color = $request->get('color', 'white');
-    return response()
-        ->view('code-svg', compact('code', 'color'))
+Route::get('/qrcode/{id}.svg', function ($id) {
+    $item = Item::findOrFail($id);
+    $qrCode = QrCode::size(300)->generate($item->web_url);
+    return response($qrCode)
         ->header('Content-Type', 'image/svg+xml')
         ->header('Cache-Control', 'max-age=15552000');
-})->where('code', '[0-1]{9}');
-
-Route::get('/import', function () {
-    ImportExhibitionsJob::dispatchSync();
-    Artisan::call('import:items');
-    $output = Artisan::output();
-    Artisan::call('import:sections');
-    $output .= Artisan::output();
-    ImportAuthoritiesJob::dispatchSync();
-    return '<pre>' . $output . '</pre>';
-});
+})->where('id', '[A-Za-z0-9.]+');
 
 Route::get('/{any}', function () {
     return view('app');
