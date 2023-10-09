@@ -1,14 +1,13 @@
 <template>
     <div class="fixed inset-0 z-50 flex justify-center items-center xl" v-if="visible">
         <div class="bg-black opacity-70 absolute inset-0 cursor-zoom-out" @click="emit('close')" />
-        <div class="h-[calc(100dvh-10rem)] overflow-y-auto overflow-x-hidden p-4">
-            <div class="h-full flex flex-col relative w-full max-w-2xl md:max-w-3xl bg-white rounded-xl">
-                <img
-                    :src="item.image_src"
-                    :alt="item.title"
-                    ref="zoom"
-                    class="w-full rounded-t-xl object-cover"
-                />
+        <div
+            class="h-[calc(100dvh-10rem)] w-[calc(100dvw-10rem)] overflow-y-auto overflow-x-hidden p-4 flex items-center justify-center"
+        >
+            <div class="h-full flex flex-col relative w-full bg-white rounded-xl">
+                <div class="bg-gray-softest h-full rounded-t-xl overflow-hidden">
+                    <img :src="item.image_src" :alt="item.title" ref="zoom" class="w-full" />
+                </div>
                 <div class="px-4 py-4 md:py-6 md:px-6">
                     <h3 class="text-gray-dark text-lg md:text-2xl mb-1" v-if="item.object">
                         {{ item.object }}
@@ -44,11 +43,11 @@
 
 <script setup>
 import { ref, computed, onUnmounted, watch } from 'vue'
-import PinchZoom from "pinch-zoom-js"
+import PinchZoom from 'pinch-zoom-js'
 import ConfirmButton from './ConfirmButton.vue'
 
-let pz;
-const zoom = ref();
+let pz
+const zoom = ref()
 
 const props = defineProps({
     visible: Boolean,
@@ -65,7 +64,7 @@ onUnmounted(() => {
 
 watch(zoom, (newZoom) => {
     if (newZoom) {
-        pz = new PinchZoom(newZoom, {minZoom: 0.9})
-  }
+        pz = new PinchZoom(newZoom, { minZoom: 0.9 })
+    }
 })
 </script>
