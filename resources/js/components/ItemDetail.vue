@@ -1,12 +1,13 @@
 <template>
-    <div class="fixed inset-0 z-50 flex justify-center items-center" v-if="visible">
+    <div class="fixed inset-0 z-50 flex justify-center items-center xl" v-if="visible">
         <div class="bg-black opacity-70 absolute inset-0 cursor-zoom-out" @click="emit('close')" />
-        <div class="max-h-full overflow-y-auto overflow-x-hidden p-4">
-            <div class="relative w-full max-w-2xl md:max-w-3xl bg-white rounded-xl">
+        <div class="h-[calc(100dvh-10rem)] overflow-y-auto overflow-x-hidden p-4">
+            <div class="h-full flex flex-col relative w-full max-w-2xl md:max-w-3xl bg-white rounded-xl">
                 <img
                     :src="item.image_src"
                     :alt="item.title"
-                    class="w-full rounded-t-xl max-h-[calc(100dvh-20rem)] md:max-h-[calc(100dvh-34rem)] object-contain"
+                    ref="zoom"
+                    class="w-full rounded-t-xl object-cover"
                 />
                 <div class="px-4 py-4 md:py-6 md:px-6">
                     <h3 class="text-gray-dark text-lg md:text-2xl mb-1" v-if="item.object">
@@ -42,8 +43,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onUnmounted, watch } from 'vue'
+import PinchZoom from "pinch-zoom-js"
 import ConfirmButton from './ConfirmButton.vue'
+
+let pz;
+const zoom = ref();
+
 const props = defineProps({
     visible: Boolean,
     item: Object,
@@ -51,5 +57,15 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 const qrCode = computed(() => {
     return `/qrcode/${props.item.id}.svg`
+})
+
+onUnmounted(() => {
+    pz.destroy()
+})
+
+watch(zoom, (newZoom) => {
+    if (newZoom) {
+        pz = new PinchZoom(newZoom, {minZoom: 0.9})
+  }
 })
 </script>
