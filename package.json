@@ -20,6 +20,7 @@
         "@tailwindcss/aspect-ratio": "^0.4.2",
         "@vitejs/plugin-vue": "^4.3.4",
         "@vueuse/core": "^7.7.1",
+        "another-vue3-blurhash": "^0.0.1",
         "laravel-vue-i18n": "^1.2.0",
         "pinch-zoom-js": "^2.3.5",
         "pinia": "^2.0.11",

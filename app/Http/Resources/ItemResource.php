@@ -28,6 +28,7 @@ class ItemResource extends JsonResource
             'collection' => $this->collection,
             'object' => $this->object,
             'dating' => $this->dating,
+            'blurhash' => $this->blurhash,
         ];
     }
 

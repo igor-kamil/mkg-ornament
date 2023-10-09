@@ -4,6 +4,7 @@ import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { i18nVue } from 'laravel-vue-i18n'
 import { createPinia } from 'pinia'
+import VueBlurHash from 'another-vue3-blurhash'
 
 import App from './App.vue'
 import Collection from './views/Collection.vue'
@@ -107,4 +108,5 @@ app.use(i18nVue, {
     resolve: (lang) => import(`../lang/${lang}.json`),
 })
 app.use(createPinia())
+app.use(VueBlurHash)
 app.mount('#app')

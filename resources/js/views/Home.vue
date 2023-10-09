@@ -22,27 +22,35 @@
         <div class="flex bg-white grow">
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <navigate-button @click="moveSimilar('left')" direction="left"></navigate-button>
-                <img
+                <blur-hash-image
+                    :hash="similarItems[activeItem - 1].blurhash"
                     :src="similarItems[activeItem - 1].image_src"
                     :alt="similarItems[activeItem - 1].title"
+                    width="903"
+                    height="1354"
                     class="w-full h-full object-cover object-right"
                 />
             </div>
             <div
                 class="border-1 border-black grow h-[calc(100dvh-10rem)] sm:h-[calc(100dvh-16rem)] md:h-[calc(100dvh-24rem)]"
             >
-                <img
-                    @click="toggleDetail()"
+                <blur-hash-image
+                    :hash="similarItems[activeItem].blurhash"
                     :src="similarItems[activeItem].image_src"
                     :alt="similarItems[activeItem].title"
+                    width="903"
+                    height="1354"
                     class="w-full h-full object-cover cursor-pointer"
                 />
             </div>
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <navigate-button @click="moveSimilar('right')" direction="right"></navigate-button>
-                <img
+                <blur-hash-image
+                    :hash="similarItems[activeItem + 1].blurhash"
                     :src="similarItems[activeItem + 1].image_src"
                     :alt="similarItems[activeItem + 1].title"
+                    width="903"
+                    height="1354"
                     class="w-full h-full object-cover object-left"
                 />
             </div>
@@ -132,14 +140,14 @@ const loadNextSimilar = async () => {
     const viewedItemIds = similarItems.value.map((item) => item.id).join(',')
     const response = await axios.get(`/api/similar-item/${id}/?exclude=${viewedItemIds}`)
     nextSimilar.value = response.data.data
-    loadImages([nextSimilar.value.image_src])
+    // loadImages([nextSimilar.value.image_src])
 }
 
 const loadNextDifferent = async () => {
     const id = similarItems.value[activeItem.value].id
     const response = await axios.get(`/api/different-items/${id}`)
     nextDifferent.value = response.data
-    loadImages(nextDifferent.value.map((item) => item.image_src))
+    // loadImages(nextDifferent.value.map((item) => item.image_src))
 }
 
 const loadItem = async (id) => {
@@ -193,17 +201,17 @@ const processResponse = async (response) => {
     const items = response.data
     differentItems.value = [items[0], items[2]]
     similarItems.value = items[1]
-    await loadImages([
-        ...similarItems.value.map((item) => item.image_src),
-        differentItems.value[0][1].image_src,
-        differentItems.value[0][1].image_src,
-    ])
-    loadImages([
-        differentItems.value[0][0].image_src,
-        differentItems.value[0][2].image_src,
-        differentItems.value[1][0].image_src,
-        differentItems.value[1][2].image_src,
-    ])
+    // loadImages([
+    //     ...similarItems.value.map((item) => item.image_src),
+    //     differentItems.value[0][1].image_src,
+    //     differentItems.value[0][1].image_src,
+    // ])
+    // loadImages([
+    //     differentItems.value[0][0].image_src,
+    //     differentItems.value[0][2].image_src,
+    //     differentItems.value[1][0].image_src,
+    //     differentItems.value[1][2].image_src,
+    // ])
 }
 
 const toggleDetail = () => {
