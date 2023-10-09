@@ -23,11 +23,10 @@
                     <div class="flex p-2 md:p-4 border-black border-1 mb-4 rounded-xl" v-if="item.web_url">
                         <img :src="qrCode" class="w-20 h-20 md:w-32 md:h-32" alt="open in collection online" />
                         <div class="grow">
-                            <div class="flex">
-                                <div class="ml-3 md:ml-4 self-center">
-                                    <div class="font-bold">Scannen Sie den Code, um das Objekt zu öffnen</div>
-                                    <div class="text-base">in MK&G Sammlung Online</div>
-                                    <div class="text-xs"><i>{{ item.web_url }}</i></div>
+                            <div class="flex h-full items-top">
+                                <div class="ml-3 md:ml-4 md:text-2xl">
+                                    <span class="font-bold">Scannen Sie den Code, um das Objekt zu öffnen</span><br>
+                                    <span>in MK&G Sammlung Online</span>
                                 </div>
                             </div>
                         </div>
