@@ -4,7 +4,7 @@
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <button
                     class="flex items-center justify-center text-gray-medium absolute inset-0 z-10 hover:text-gray-dark w-full text-3xl md:text-8xl"
-                    @click="init()"
+                    @click="toggleInfo()"
                 >
                     ?
                 </button>
@@ -82,6 +82,7 @@
         <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-dark"></div>
     </div>
     <ItemDetail :visible="detailActive" @close="toggleDetail" :item="similarItems[activeItem]" />
+    <InfoDetail :visible="infoActive" @close="toggleInfo" />
 </template>
 
 <script setup>
@@ -89,6 +90,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getActiveLanguage, loadLanguageAsync } from 'laravel-vue-i18n'
 import ItemDetail from '../components/ItemDetail.vue'
+import InfoDetail from '../components/InfoDetail.vue'
 import NavigateButton from '../components/NavigateButton.vue'
 
 const router = useRouter()
@@ -100,6 +102,7 @@ const similarItems = ref([])
 const differentItems = ref([])
 const isLoading = ref(true)
 const detailActive = ref(false)
+const infoActive = ref(false)
 const activeItem = ref(1)
 
 const nextSimilar = ref(null)
@@ -205,6 +208,10 @@ const processResponse = async (response) => {
 
 const toggleDetail = () => {
     detailActive.value = !detailActive.value
+}
+
+const toggleInfo = () => {
+    infoActive.value = !infoActive.value
 }
 
 const loadImages = (imageSrcArray) => {
