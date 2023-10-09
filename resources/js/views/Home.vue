@@ -176,7 +176,6 @@ const moveSimilar = async (direction) => {
             break
         case 'right':
             if (activeItem.value == similarItems.value.length - 2) {
-                console.log('ale som')
                 similarItems.value.push(nextSimilar.value)
                 loadNextSimilar()
             }
