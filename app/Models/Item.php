@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Weaviate\Weaviate;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
@@ -56,6 +58,93 @@ class Item extends Model
             $items = $this->whereNotNull('asset_id')->where('collection', 'LIKE', $this->collection)->where('id', '<', $this->id)->orderBy('id', 'desc')->whereNotIn('id', $exclude)->limit($limit)->get();
         }
         if ($items->count() == 0) {
+            $items = $this->whereNotNull('asset_id')->whereNotIn('id', $exclude)->inRandomOrder()->limit($limit)->get();
+        }
+        return $items;
+    }
+
+    public function getVisualySimilar($limit = 1, $exclude = [])
+    {
+        $weaviate = new Weaviate(config('services.weaviate.url'), config('services.weaviate.token'));
+
+        // get weaviate Object ID
+        $data = $weaviate->graphql()->get('{
+            Get {
+              Ornament (
+                limit: 1
+                where: {
+                  path: ["inventarnummer"],
+                  operator: Equal,
+                  valueText: "'.$this->id.'"
+                }
+              ) {
+                inventarnummer
+                image_url
+                _additional {
+                  id
+                  distance
+                }
+              }
+            }
+          }');
+          
+          
+        $object_id= Arr::get($data, 'data.Get.Ornament.0._additional.id');
+
+        $exclude_query = '';
+        foreach ($exclude as $exclude_id) {
+            $exclude_query .= '
+            {
+                path: ["inventarnummer"],
+                operator: NotEqual,
+                valueText: "2013.86",
+            },
+            ';
+        } 
+
+        if (!empty($exclude_query)) {
+            $exclude_query = '
+            where: {
+                operator: And,
+                operands: [
+                    '.$exclude_query.'
+                    ]
+                }
+            ';
+        }
+        
+        $data = $weaviate->graphql()->get('{
+            Get {
+              Ornament (
+                offset: 1
+                limit: '.$limit.'
+                nearObject: {
+                  id: "'.$object_id.'"
+                }
+                '.$exclude_query.'
+              ) {
+                inventarnummer
+                image_url
+                _additional {
+                  distance
+                }
+              }
+            }
+          }');
+        $ids = collect(Arr::pluck(Arr::get($data, 'data.Get.Ornament') ?? [], 'inventarnummer'));
+        
+        // $filteredIds = $ids->reject(function ($id) use ($exclude) {
+        //     return in_array($id, $exclude);
+        // })->take($limit);
+
+
+        $items = $this->whereNotNull('asset_id')->whereIn('id', $ids)->limit($limit)->get();
+        
+        // fallback... better to remove later
+        if ($items->count() < $limit) {
+            $items = $this->whereNotNull('asset_id')->where('collection', 'LIKE', $this->collection)->where('id', '<', $this->id)->orderBy('id', 'desc')->whereNotIn('id', $exclude)->limit($limit)->get();
+        }
+        if ($items->count() < $limit) {
             $items = $this->whereNotNull('asset_id')->whereNotIn('id', $exclude)->inRandomOrder()->limit($limit)->get();
         }
         return $items;

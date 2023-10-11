@@ -31,7 +31,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 Route::get('/items/', function (Request $request) {
     $mainItem =  ($request->has('id')) ? Item::findOrFail($request->input('id')) : Item::whereNotNull('asset_id')->inRandomOrder()->first();
-    $similarItems = $mainItem->getSimilar(2);
+    $similarItems = $mainItem->getVisualySimilar(2);
     $differentItems = Item::whereNotNull('asset_id')->where('collection', 'NOT LIKE', $mainItem->collection)->inRandomOrder()->limit(2)->get();
     
     return response()->json([ 
@@ -41,19 +41,6 @@ Route::get('/items/', function (Request $request) {
     ]);
 });
 
-Route::get('/items-digicult/', function (Request $request) {
-    $mainItem =  ($request->has('id')) ? Item::findOrFail($request->input('id')) : Item::whereNotNull('image_src')->inRandomOrder()->first();
-    $similarItems = Item::whereNotNull('image_src')->where('collection', 'LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
-    $differentItems = Item::whereNotNull('image_src')->where('collection', 'NOT LIKE', $mainItem->collection)->inRandomOrder()->take(2)->get();
-    $items = collect([
-        $differentItems[0],
-        $similarItems[0],
-        $mainItem,
-        $similarItems[1],
-        $differentItems[1],
-    ]);
-    return ItemResourceDigicult::collection($items);
-});
 
 Route::get('/items/{id}', function (string $id) {
     $item = Item::findOrFail($id);
@@ -63,7 +50,7 @@ Route::get('/items/{id}', function (string $id) {
 Route::get('/similar-item/{id}', function ($id, Request $request) {
     $item = Item::findOrFail($id);
     $exclude = explode(',' , $request->get('exclude', ''));
-    $similiarItem = $item->getSimilar(1,$exclude)->first();
+    $similiarItem = $item->getVisualySimilar(1,$exclude)->first();
     return new ItemResource($similiarItem);
 });
 

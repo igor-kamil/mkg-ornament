@@ -13,9 +13,13 @@ return [
     |
     */
 
-    'webumenia' => [
-        'url' => env('WEBUMENIA_URL', 'https://www.webumenia.sk'),
-        'api' => env('WEBUMENIA_API', 'https://www.webumenia.sk/api'),
+    'sammlung' => [
+        'url' => env('SAMMLUNG_URL', 'https://sammlungonline.mkg-hamburg.de/'),
+    ],
+
+    'weaviate' => [
+        'url' => env('WEAVIATE_URL', 'http://localhost:8080/v1/'),
+        'token' => env('WEAVIATE_TOKEN', ''),
     ],
 
     'vimeo' => [
