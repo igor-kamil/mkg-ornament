@@ -8,4 +8,9 @@
     html {
         -webkit-tap-highlight-color: transparent;
     }
+    body {
+        touch-action: manipulation;
+        -ms-touch-action: manipulation;
+        touch-action: pan-x pan-y;
+    }
 }
