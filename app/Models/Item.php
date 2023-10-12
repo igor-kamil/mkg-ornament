@@ -73,13 +73,12 @@ class Item extends Model
               Ornament (
                 limit: 1
                 where: {
-                  path: ["inventarnummer"],
+                  path: ["identifier"],
                   operator: Equal,
                   valueText: "'.$this->id.'"
                 }
               ) {
-                inventarnummer
-                image_url
+                identifier
                 _additional {
                   id
                   distance
@@ -95,9 +94,9 @@ class Item extends Model
         foreach ($exclude as $exclude_id) {
             $exclude_query .= '
             {
-                path: ["inventarnummer"],
+                path: ["identifier"],
                 operator: NotEqual,
-                valueText: "2013.86",
+                valueText: "'.$exclude_id.'",
             },
             ';
         } 
@@ -112,6 +111,7 @@ class Item extends Model
                 }
             ';
         }
+
         
         $data = $weaviate->graphql()->get('{
             Get {
@@ -123,15 +123,14 @@ class Item extends Model
                 }
                 '.$exclude_query.'
               ) {
-                inventarnummer
-                image_url
+                identifier
                 _additional {
                   distance
                 }
               }
             }
           }');
-        $ids = collect(Arr::pluck(Arr::get($data, 'data.Get.Ornament') ?? [], 'inventarnummer'));
+        $ids = collect(Arr::pluck(Arr::get($data, 'data.Get.Ornament') ?? [], 'identifier'));
         
         // $filteredIds = $ids->reject(function ($id) use ($exclude) {
         //     return in_array($id, $exclude);
@@ -140,12 +139,9 @@ class Item extends Model
 
         $items = $this->whereNotNull('asset_id')->whereIn('id', $ids)->limit($limit)->get();
         
-        // fallback... better to remove later
+        // fallback... to return at lease better to remove later
         if ($items->count() < $limit) {
-            $items = $this->whereNotNull('asset_id')->where('collection', 'LIKE', $this->collection)->where('id', '<', $this->id)->orderBy('id', 'desc')->whereNotIn('id', $exclude)->limit($limit)->get();
-        }
-        if ($items->count() < $limit) {
-            $items = $this->whereNotNull('asset_id')->whereNotIn('id', $exclude)->inRandomOrder()->limit($limit)->get();
+            return $this->getSimilar($limit, $exclude);
         }
         return $items;
     }

@@ -35,9 +35,9 @@ Route::get('/items/', function (Request $request) {
     $differentItems = Item::whereNotNull('asset_id')->where('collection', 'NOT LIKE', $mainItem->collection)->inRandomOrder()->limit(2)->get();
     
     return response()->json([ 
-        ItemResource::collection($differentItems[0]->getSimilar(2)->push($differentItems[0])),
+        ItemResource::collection($differentItems[0]->getVisualySimilar(2)->push($differentItems[0])),
         ItemResource::collection([$similarItems[0], $mainItem, $similarItems[1]]),
-        ItemResource::collection($differentItems[1]->getSimilar(2)->push($differentItems[1])),
+        ItemResource::collection($differentItems[1]->getVisualySimilar(2)->push($differentItems[1])),
     ]);
 });
 
