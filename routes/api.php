@@ -32,12 +32,15 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 Route::get('/items/', function (Request $request) {
     $mainItem =  ($request->has('id')) ? Item::findOrFail($request->input('id')) : Item::whereNotNull('asset_id')->inRandomOrder()->first();
     $similarItems = $mainItem->getVisualySimilar(2);
-    $differentItems = Item::whereNotNull('asset_id')->where('collection', 'NOT LIKE', $mainItem->collection)->inRandomOrder()->limit(2)->get();
+    $youngerItem = Item::whereNotNull('asset_id')->where('year_from', '>=', $mainItem->year_from)->inRandomOrder()->first();
+    $similarToYoungerItem = $youngerItem->getVisualySimilar(2);
+    $olderItem = Item::whereNotNull('asset_id')->where('year_from', '<=', $mainItem->year_from)->inRandomOrder()->first();
+    $similarToOlderItem = $olderItem->getVisualySimilar(2);
     
     return response()->json([ 
-        ItemResource::collection($differentItems[0]->getVisualySimilar(2)->push($differentItems[0])),
+        ItemResource::collection([$similarToYoungerItem[0], $youngerItem, $similarToYoungerItem[1]]),
         ItemResource::collection([$similarItems[0], $mainItem, $similarItems[1]]),
-        ItemResource::collection($differentItems[1]->getVisualySimilar(2)->push($differentItems[1])),
+        ItemResource::collection([$similarToOlderItem[0], $olderItem, $similarToOlderItem[1]]),
     ]);
 });
 
@@ -58,8 +61,26 @@ Route::get('/different-items/{id}', function ($id, Request $request) {
     $item = Item::findOrFail($id);
     $exclude = explode(',' , $request->get('exclude', ''));
     $differentItem = Item::whereNotNull('asset_id')->where('collection', 'NOT LIKE', $item->collection)->inRandomOrder()->first();
-    // $similiarItem = $item->getSimilar(1,$exclude)->first();
+    // $similiarItem = $item->getVisualySimilar(1,$exclude)->first();
     return response()->json(
-        ItemResource::collection($differentItem->getSimilar(2)->push($differentItem)),
+        ItemResource::collection($differentItem->getVisualySimilar(2)->push($differentItem)),
+    );
+});
+
+Route::get('/older-items/{id}', function ($id, Request $request) {
+    $item = Item::findOrFail($id);
+    $olderItem = Item::whereNotNull('asset_id')->where('year_from', '<=', $item->year_from)->inRandomOrder()->first();
+    $similarToOlderItem = $olderItem->getVisualySimilar(2);
+    return response()->json(
+        ItemResource::collection([$similarToOlderItem[0], $olderItem, $similarToOlderItem[1]]),
+    );
+});
+
+Route::get('/younger-items/{id}', function ($id, Request $request) {
+    $item = Item::findOrFail($id);
+    $youngerItem = Item::whereNotNull('asset_id')->where('year_from', '>=', $item->year_from)->inRandomOrder()->first();
+    $similarToYoungerItem = $youngerItem->getVisualySimilar(2);
+    return response()->json(
+        ItemResource::collection([$similarToYoungerItem[0], $youngerItem, $similarToYoungerItem[1]]),
     );
 });
