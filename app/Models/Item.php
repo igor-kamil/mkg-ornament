@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Weaviate\Weaviate;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
@@ -57,6 +59,89 @@ class Item extends Model
         }
         if ($items->count() == 0) {
             $items = $this->whereNotNull('asset_id')->whereNotIn('id', $exclude)->inRandomOrder()->limit($limit)->get();
+        }
+        return $items;
+    }
+
+    public function getVisualySimilar($limit = 1, $exclude = [])
+    {
+        $weaviate = new Weaviate(config('services.weaviate.url'), config('services.weaviate.token'));
+
+        // get weaviate Object ID
+        $data = $weaviate->graphql()->get('{
+            Get {
+              Ornament (
+                limit: 1
+                where: {
+                  path: ["identifier"],
+                  operator: Equal,
+                  valueText: "'.$this->id.'"
+                }
+              ) {
+                identifier
+                _additional {
+                  id
+                  distance
+                }
+              }
+            }
+          }');
+          
+          
+        $object_id= Arr::get($data, 'data.Get.Ornament.0._additional.id');
+
+        $exclude_query = '';
+        foreach ($exclude as $exclude_id) {
+            $exclude_query .= '
+            {
+                path: ["identifier"],
+                operator: NotEqual,
+                valueText: "'.$exclude_id.'",
+            },
+            ';
+        } 
+
+        if (!empty($exclude_query)) {
+            $exclude_query = '
+            where: {
+                operator: And,
+                operands: [
+                    '.$exclude_query.'
+                    ]
+                }
+            ';
+        }
+
+        
+        $data = $weaviate->graphql()->get('{
+            Get {
+              Ornament (
+                offset: 1
+                limit: '.$limit.'
+                nearObject: {
+                  id: "'.$object_id.'"
+                }
+                '.$exclude_query.'
+              ) {
+                identifier
+                _additional {
+                  distance
+                }
+              }
+            }
+          }');
+        $ids = collect(Arr::pluck(Arr::get($data, 'data.Get.Ornament') ?? [], 'identifier'));
+        
+        // $filteredIds = $ids->reject(function ($id) use ($exclude) {
+        //     return in_array($id, $exclude);
+        // })->take($limit);
+
+
+        $items = $this->whereNotNull('asset_id')->whereIn('id', $ids)->limit($limit)->get();
+        
+        // fallback... to return at lease better to remove later
+        if ($items->count() < $limit) {
+            return $this->getSimilar($limit, $exclude);
         }
         return $items;
     }

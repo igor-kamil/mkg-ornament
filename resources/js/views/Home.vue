@@ -106,7 +106,10 @@ const infoActive = ref(false)
 const activeItem = ref(1)
 
 const nextSimilar = ref(null)
+const prevSimilar = ref(null)
 const nextDifferent = ref([])
+const nextYounger = ref([])
+const nextOlder = ref([])
 
 const apiUrl = '/api/items/'
 
@@ -120,19 +123,32 @@ const init = async (id = null) => {
     isLoading.value = true
     activeItem.value = 1
     similarItems.value = []
+    nextSimilar.value = null
+    prevSimilar.value = null
     const response = await axios.get(apiUrl + (id !== null ? `?id=${id}` : ''))
     await processResponse(response)
     isLoading.value = false
     loadNextSimilar()
+    loadPrevSimilar()
     loadNextDifferent()
+    // loadNextYounger()
+    // loadNextOlder()
 }
 
 const loadNextSimilar = async () => {
-    const id = similarItems.value[activeItem.value].id
+    const id = nextSimilar.value ? nextSimilar.value.id : similarItems.value[activeItem.value + 1].id
     const viewedItemIds = similarItems.value.map((item) => item.id).join(',')
     const response = await axios.get(`/api/similar-item/${id}/?exclude=${viewedItemIds}`)
     nextSimilar.value = response.data.data
     loadImages([nextSimilar.value.image_src])
+}
+
+const loadPrevSimilar = async () => {
+    const id = prevSimilar.value ? prevSimilar.value.id : similarItems.value[activeItem.value - 1].id
+    const viewedItemIds = similarItems.value.map((item) => item.id).join(',')
+    const response = await axios.get(`/api/similar-item/${id}/?exclude=${viewedItemIds}`)
+    prevSimilar.value = response.data.data
+    loadImages([prevSimilar.value.image_src])
 }
 
 const loadNextDifferent = async () => {
@@ -140,6 +156,20 @@ const loadNextDifferent = async () => {
     const response = await axios.get(`/api/different-items/${id}`)
     nextDifferent.value = response.data
     loadImages(nextDifferent.value.map((item) => item.image_src))
+}
+
+const loadNextYounger = async () => {
+    const id = similarItems.value[activeItem.value].id
+    const response = await axios.get(`/api/younger-items/${id}`)
+    nextYounger.value = response.data
+    loadImages(nextYounger.value.map((item) => item.image_src))
+}
+
+const loadNextOlder = async () => {
+    const id = similarItems.value[activeItem.value].id
+    const response = await axios.get(`/api/older-items/${id}`)
+    nextOlder.value = response.data
+    loadImages(nextOlder.value.map((item) => item.image_src))
 }
 
 const loadItem = async (id) => {
@@ -154,27 +184,41 @@ const moveSimilar = async (direction) => {
     isLoading.value = true
     switch (direction) {
         case 'up':
-            differentItems.value[1] = [similarItems.value[activeItem.value-1], similarItems.value[activeItem.value], similarItems.value[activeItem.value+1]]
+            differentItems.value[1] = [
+                similarItems.value[activeItem.value - 1],
+                similarItems.value[activeItem.value],
+                similarItems.value[activeItem.value + 1],
+            ]
             similarItems.value = differentItems.value[0]
             differentItems.value[0] = nextDifferent.value
             activeItem.value = 1
+            nextSimilar.value = null
+            prevSimilar.value = null
             loadNextSimilar()
+            loadPrevSimilar()
             loadNextDifferent()
             break
         case 'down':
-            differentItems.value[0] = [similarItems.value[activeItem.value-1], similarItems.value[activeItem.value], similarItems.value[activeItem.value+1]]
+            differentItems.value[0] = [
+                similarItems.value[activeItem.value - 1],
+                similarItems.value[activeItem.value],
+                similarItems.value[activeItem.value + 1],
+            ]
             similarItems.value = differentItems.value[1]
             differentItems.value[1] = nextDifferent.value
             activeItem.value = 1
+            nextSimilar.value = null
+            prevSimilar.value = null
             loadNextSimilar()
+            loadPrevSimilar()
             loadNextDifferent()
             break
         case 'left':
             if (activeItem.value > 2) {
                 activeItem.value--
             } else {
-                similarItems.value.unshift(nextSimilar.value)
-                loadNextSimilar()
+                similarItems.value.unshift(prevSimilar.value)
+                loadPrevSimilar()
             }
             break
         case 'right':
