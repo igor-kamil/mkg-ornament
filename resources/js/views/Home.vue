@@ -123,6 +123,8 @@ const init = async (id = null) => {
     isLoading.value = true
     activeItem.value = 1
     similarItems.value = []
+    nextSimilar.value = null
+    prevSimilar.value = null
     const response = await axios.get(apiUrl + (id !== null ? `?id=${id}` : ''))
     await processResponse(response)
     isLoading.value = false
@@ -134,7 +136,7 @@ const init = async (id = null) => {
 }
 
 const loadNextSimilar = async () => {
-    const id = (nextSimilar.value) ? nextSimilar.value.id : similarItems.value[activeItem.value + 1].id
+    const id = nextSimilar.value ? nextSimilar.value.id : similarItems.value[activeItem.value + 1].id
     const viewedItemIds = similarItems.value.map((item) => item.id).join(',')
     const response = await axios.get(`/api/similar-item/${id}/?exclude=${viewedItemIds}`)
     nextSimilar.value = response.data.data
@@ -142,7 +144,7 @@ const loadNextSimilar = async () => {
 }
 
 const loadPrevSimilar = async () => {
-    const id = (prevSimilar.value) ? prevSimilar.value.id : similarItems.value[activeItem.value - 1].id
+    const id = prevSimilar.value ? prevSimilar.value.id : similarItems.value[activeItem.value - 1].id
     const viewedItemIds = similarItems.value.map((item) => item.id).join(',')
     const response = await axios.get(`/api/similar-item/${id}/?exclude=${viewedItemIds}`)
     prevSimilar.value = response.data.data
@@ -182,23 +184,31 @@ const moveSimilar = async (direction) => {
     isLoading.value = true
     switch (direction) {
         case 'up':
-            differentItems.value[1] = [similarItems.value[activeItem.value-1], similarItems.value[activeItem.value], similarItems.value[activeItem.value+1]]
+            differentItems.value[1] = [
+                similarItems.value[activeItem.value - 1],
+                similarItems.value[activeItem.value],
+                similarItems.value[activeItem.value + 1],
+            ]
             similarItems.value = differentItems.value[0]
             differentItems.value[0] = nextDifferent.value
             activeItem.value = 1
-            nextSimilar.value = null;
-            prevSimilar.value = null;
+            nextSimilar.value = null
+            prevSimilar.value = null
             loadNextSimilar()
             loadPrevSimilar()
             loadNextDifferent()
             break
         case 'down':
-            differentItems.value[0] = [similarItems.value[activeItem.value-1], similarItems.value[activeItem.value], similarItems.value[activeItem.value+1]]
+            differentItems.value[0] = [
+                similarItems.value[activeItem.value - 1],
+                similarItems.value[activeItem.value],
+                similarItems.value[activeItem.value + 1],
+            ]
             similarItems.value = differentItems.value[1]
             differentItems.value[1] = nextDifferent.value
             activeItem.value = 1
-            nextSimilar.value = null;
-            prevSimilar.value = null;
+            nextSimilar.value = null
+            prevSimilar.value = null
             loadNextSimilar()
             loadPrevSimilar()
             loadNextDifferent()
