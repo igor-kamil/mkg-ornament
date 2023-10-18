@@ -11,8 +11,9 @@
             </div>
             <div class="border-1 border-black grow relative">
                 <navigate-button @click="moveSimilar('up')" direction="up"></navigate-button>
-                <img
+                <v-lazy-image
                     :src="differentItems[0][1].image_src"
+                    :src-placeholder="differentItems[0][1].tiny_placeholder"
                     :alt="differentItems[0][1].title"
                     class="w-full h-full object-cover object-bottom"
                 />
@@ -22,8 +23,9 @@
         <div class="flex bg-white grow">
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <navigate-button @click="moveSimilar('left')" direction="left"></navigate-button>
-                <img
+                <v-lazy-image
                     :src="similarItems[activeItem - 1].image_src"
+                    :src-placeholder="similarItems[activeItem - 1].tiny_placeholder"
                     :alt="similarItems[activeItem - 1].title"
                     class="w-full h-full object-cover object-right"
                 />
@@ -31,17 +33,19 @@
             <div
                 class="border-1 border-black grow h-[calc(100dvh-10rem)] sm:h-[calc(100dvh-16rem)] md:h-[calc(100dvh-24rem)]"
             >
-                <img
+                <v-lazy-image
                     @click="toggleDetail()"
                     :src="similarItems[activeItem].image_src"
+                    :src-placeholder="similarItems[activeItem].tiny_placeholder"
                     :alt="similarItems[activeItem].title"
                     class="w-full h-full object-cover cursor-pointer"
                 />
             </div>
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
                 <navigate-button @click="moveSimilar('right')" direction="right"></navigate-button>
-                <img
+                <v-lazy-image
                     :src="similarItems[activeItem + 1].image_src"
+                    :src-placeholder="similarItems[activeItem + 1].tiny_placeholder"
                     :alt="similarItems[activeItem + 1].title"
                     class="w-full h-full object-cover object-left"
                 />
@@ -51,8 +55,9 @@
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative"></div>
             <div class="border-1 border-black grow relative">
                 <navigate-button @click="moveSimilar('down')" direction="down"></navigate-button>
-                <img
+                <v-lazy-image
                     :src="differentItems[1][1].image_src"
+                    :src-placeholder="differentItems[1][1].src-placeholder"
                     :alt="differentItems[1][1].title"
                     class="w-full h-full object-cover object-top"
                 />
@@ -89,6 +94,8 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getActiveLanguage, loadLanguageAsync } from 'laravel-vue-i18n'
+// import ImageDisplay from '../components/ImageDisplay.vue'
+import VLazyImage from "v-lazy-image";
 import ItemDetail from '../components/ItemDetail.vue'
 import InfoDetail from '../components/InfoDetail.vue'
 import NavigateButton from '../components/NavigateButton.vue'

@@ -14,7 +14,7 @@ class Item extends Model
 
     protected $fillable = [
         'image_src',
-        'asset_id',
+        'tiny_placeholder',
     ];
 
     public function assets()
@@ -53,12 +53,12 @@ class Item extends Model
 
     public function getSimilar($limit = 1, $exclude = [])
     {
-        $items = $this->whereNotNull('asset_id')->where('collection', 'LIKE', $this->collection)->where('id', '>', $this->id)->orderBy('id', 'asc')->whereNotIn('id', $exclude)->limit($limit)->get();
+        $items = $this->whereNotNull('tiny_placeholder')->where('collection', 'LIKE', $this->collection)->where('id', '>', $this->id)->orderBy('id', 'asc')->whereNotIn('id', $exclude)->limit($limit)->get();
         if ($items->count() == 0) {
-            $items = $this->whereNotNull('asset_id')->where('collection', 'LIKE', $this->collection)->where('id', '<', $this->id)->orderBy('id', 'desc')->whereNotIn('id', $exclude)->limit($limit)->get();
+            $items = $this->whereNotNull('tiny_placeholder')->where('collection', 'LIKE', $this->collection)->where('id', '<', $this->id)->orderBy('id', 'desc')->whereNotIn('id', $exclude)->limit($limit)->get();
         }
         if ($items->count() == 0) {
-            $items = $this->whereNotNull('asset_id')->whereNotIn('id', $exclude)->inRandomOrder()->limit($limit)->get();
+            $items = $this->whereNotNull('tiny_placeholder')->whereNotIn('id', $exclude)->inRandomOrder()->limit($limit)->get();
         }
         return $items;
     }
@@ -137,7 +137,7 @@ class Item extends Model
         // })->take($limit);
 
 
-        $items = $this->whereNotNull('asset_id')->whereIn('id', $ids)->limit($limit)->get();
+        $items = $this->whereNotNull('tiny_placeholder')->whereIn('id', $ids)->limit($limit)->get();
         
         // fallback... to return at lease better to remove later
         if ($items->count() < $limit) {
