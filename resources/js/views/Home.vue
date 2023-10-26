@@ -16,6 +16,7 @@
                     :src-placeholder="differentItems[0][1].tiny_placeholder"
                     :alt="differentItems[0][1].title"
                     class="w-full h-full object-cover object-bottom"
+                    :key="differentItems[0][1].image_src"
                 />
             </div>
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0"></div>
@@ -28,6 +29,7 @@
                     :src-placeholder="similarItems[activeItem - 1].tiny_placeholder"
                     :alt="similarItems[activeItem - 1].title"
                     class="w-full h-full object-cover object-right"
+                    :key="similarItems[activeItem - 1].image_src"
                 />
             </div>
             <div
@@ -39,6 +41,7 @@
                     :src-placeholder="similarItems[activeItem].tiny_placeholder"
                     :alt="similarItems[activeItem].title"
                     class="w-full h-full object-cover cursor-pointer"
+                    :key="similarItems[activeItem].image_src"
                 />
             </div>
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
@@ -48,6 +51,7 @@
                     :src-placeholder="similarItems[activeItem + 1].tiny_placeholder"
                     :alt="similarItems[activeItem + 1].title"
                     class="w-full h-full object-cover object-left"
+                    :key="similarItems[activeItem + 1].image_src"
                 />
             </div>
         </div>
@@ -60,6 +64,7 @@
                     :src-placeholder="differentItems[1][1].src-placeholder"
                     :alt="differentItems[1][1].title"
                     class="w-full h-full object-cover object-top"
+                    :key="differentItems[1][1].image_src"
                 />
             </div>
             <div class="border-1 border-black w-20 sm:w-32 md:w-48 shrink-0 relative">
