@@ -142,9 +142,9 @@ const init = async (id = null) => {
     isLoading.value = false
     loadNextSimilar()
     loadPrevSimilar()
-    loadNextDifferent()
-    // loadNextYounger()
-    // loadNextOlder()
+    // loadNextDifferent()
+    loadNextYounger()
+    loadNextOlder()
 }
 
 const loadNextSimilar = async () => {
@@ -202,13 +202,13 @@ const moveSimilar = async (direction) => {
                 similarItems.value[activeItem.value + 1],
             ]
             similarItems.value = differentItems.value[0]
-            differentItems.value[0] = nextDifferent.value
+            differentItems.value[0] = nextYounger.value
             activeItem.value = 1
             nextSimilar.value = null
             prevSimilar.value = null
             loadNextSimilar()
             loadPrevSimilar()
-            loadNextDifferent()
+            loadNextYounger()
             break
         case 'down':
             differentItems.value[0] = [
@@ -217,13 +217,13 @@ const moveSimilar = async (direction) => {
                 similarItems.value[activeItem.value + 1],
             ]
             similarItems.value = differentItems.value[1]
-            differentItems.value[1] = nextDifferent.value
+            differentItems.value[1] = nextOlder.value
             activeItem.value = 1
             nextSimilar.value = null
             prevSimilar.value = null
             loadNextSimilar()
             loadPrevSimilar()
-            loadNextDifferent()
+            loadNextOlder()
             break
         case 'left':
             if (activeItem.value > 2) {
