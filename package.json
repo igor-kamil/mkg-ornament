@@ -23,6 +23,7 @@
         "laravel-vue-i18n": "^1.2.0",
         "pinch-zoom-js": "^2.3.5",
         "pinia": "^2.0.11",
+        "v-lazy-image": "^2.1.1",
         "vue": "^3.2.29",
         "vue-router": "^4.0.12",
         "vue3-carousel": "^0.1.46",

@@ -28,6 +28,7 @@ class ItemResource extends JsonResource
             'collection' => $this->collection,
             'object' => $this->object,
             'dating' => $this->dating,
+            'tiny_placeholder' => $this->tiny_placeholder,
         ];
     }
 
