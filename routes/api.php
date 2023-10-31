@@ -32,9 +32,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 Route::get('/items/', function (Request $request) {
     $mainItem =  ($request->has('id')) ? Item::findOrFail($request->input('id')) : Item::whereNotNull('tiny_placeholder')->inRandomOrder()->first();
     $similarItems = $mainItem->getVisualySimilar(2);
-    $youngerItem = Item::whereNotNull('tiny_placeholder')->where('year_from', '>=', $mainItem->year_from)->inRandomOrder()->first();
+    $youngerItem = $mainItem->getYounger();
     $similarToYoungerItem = $youngerItem->getVisualySimilar(2);
-    $olderItem = Item::whereNotNull('tiny_placeholder')->where('year_from', '<=', $mainItem->year_from)->inRandomOrder()->first();
+    $olderItem = $mainItem->getOlder();
     $similarToOlderItem = $olderItem->getVisualySimilar(2);
     
     return response()->json([ 
@@ -69,7 +69,7 @@ Route::get('/different-items/{id}', function ($id, Request $request) {
 
 Route::get('/older-items/{id}', function ($id, Request $request) {
     $item = Item::findOrFail($id);
-    $olderItem = Item::whereNotNull('tiny_placeholder')->where('year_from', '<=', $item->year_from)->inRandomOrder()->first();
+    $olderItem = $item->getOlder();
     $similarToOlderItem = $olderItem->getVisualySimilar(2);
     return response()->json(
         ItemResource::collection([$similarToOlderItem[0], $olderItem, $similarToOlderItem[1]]),
@@ -78,7 +78,7 @@ Route::get('/older-items/{id}', function ($id, Request $request) {
 
 Route::get('/younger-items/{id}', function ($id, Request $request) {
     $item = Item::findOrFail($id);
-    $youngerItem = Item::whereNotNull('tiny_placeholder')->where('year_from', '>=', $item->year_from)->inRandomOrder()->first();
+    $youngerItem = $item->getYounger();
     $similarToYoungerItem = $youngerItem->getVisualySimilar(2);
     return response()->json(
         ItemResource::collection([$similarToYoungerItem[0], $youngerItem, $similarToYoungerItem[1]]),

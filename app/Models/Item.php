@@ -147,6 +147,20 @@ class Item extends Model
         return $items;
     }
 
+    public function getOlder($exclude = [])
+    {
+      $olderItem = self::whereNotNull('tiny_placeholder')->where('year_from', '<=', $this->year_from)->whereNotIn('id', $exclude)->inRandomOrder()->first();
+      return $olderItem;
+    }
+
+
+    public function getYounger($exclude = [])
+    {
+      $youngerItem = Item::whereNotNull('tiny_placeholder')->where('year_from', '>=', $this->year_from)->whereNotIn('id', $exclude)->inRandomOrder()->first();
+      return $youngerItem;
+    }
+
+
     public static function formatDatesIntoCollection($date_string, $separator = ' / ')
     {
         return collect(explode($separator, $date_string))->map(function ($year) {
