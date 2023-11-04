@@ -50,6 +50,17 @@ Route::get('/items/{id}', function (string $id) {
     return new ItemResource($item);
 });
 
+Route::get('/next-items/{id}', function ($id, Request $request) {
+    $item = Item::findOrFail($id);
+    $exclude = explode(',' , $request->get('exclude', ''));
+    $similiarItem = $item->getVisualySimilar(1,$exclude)->first();
+    $youngerItem = $similiarItem->getYounger($exclude);
+    $olderItem = $similiarItem->getOlder($exclude);
+    return response()->json(
+        ItemResource::collection([$youngerItem, $similiarItem, $olderItem]),
+    );
+});
+
 Route::get('/similar-item/{id}', function ($id, Request $request) {
     $item = Item::findOrFail($id);
     $exclude = explode(',' , $request->get('exclude', ''));
@@ -60,11 +71,14 @@ Route::get('/similar-item/{id}', function ($id, Request $request) {
 Route::get('/different-items/{id}', function ($id, Request $request) {
     $item = Item::findOrFail($id);
     $exclude = explode(',' , $request->get('exclude', ''));
-    $differentItem = Item::whereNotNull('tiny_placeholder')->where('collection', 'NOT LIKE', $item->collection)->inRandomOrder()->first();
-    // $similiarItem = $item->getVisualySimilar(1,$exclude)->first();
-    return response()->json(
-        ItemResource::collection($differentItem->getVisualySimilar(2)->push($differentItem)),
-    );
+    $youngerItem = $item->getYounger($exclude);
+    $similarToYoungerItem = $youngerItem->getVisualySimilar(2);
+    $olderItem = $item->getOlder($exclude);
+    $similarToOlderItem = $olderItem->getVisualySimilar(2);
+    return response()->json([ 
+        ItemResource::collection([$similarToYoungerItem[0], $youngerItem, $similarToYoungerItem[1]]),
+        ItemResource::collection([$similarToOlderItem[0], $olderItem, $similarToOlderItem[1]]),
+    ]);
 });
 
 Route::get('/older-items/{id}', function ($id, Request $request) {

@@ -61,7 +61,7 @@
                 <navigate-button @click="moveSimilar('down')" direction="down"></navigate-button>
                 <v-lazy-image
                     :src="differentItems[1][1].image_src"
-                    :src-placeholder="differentItems[1][1].src-placeholder"
+                    :src-placeholder="differentItems[1][1].tiny_placeholder"
                     :alt="differentItems[1][1].title"
                     class="w-full h-full object-cover object-top"
                     :key="differentItems[1][1].image_src"
@@ -152,7 +152,14 @@ const loadNextSimilar = async () => {
     const viewedItemIds = similarItems.value.map((item) => item.id).join(',')
     const response = await axios.get(`/api/similar-item/${id}/?exclude=${viewedItemIds}`)
     nextSimilar.value = response.data.data
-    loadImages([nextSimilar.value.image_src])
+    // loadImages([nextSimilar.value.image_src])
+}
+
+const loadDifferent = async (id) => {
+    const viewedItemIds = similarItems.value.map((item) => item.id).join(',')
+    const response = await axios.get(`/api/different-items/${id}/?exclude=${viewedItemIds}`)
+    const items = response.data
+    differentItems.value = [items[0], items[1]]
 }
 
 const loadPrevSimilar = async () => {
@@ -165,7 +172,7 @@ const loadPrevSimilar = async () => {
 
 const loadNextDifferent = async () => {
     const id = similarItems.value[activeItem.value].id
-    const response = await axios.get(`/api/different-items/${id}`)
+    const response = await axios.get(`/api/different-items/${id}/?exclude=${viewedItemIds}`)
     nextDifferent.value = response.data
     loadImages(nextDifferent.value.map((item) => item.image_src))
 }
@@ -232,6 +239,7 @@ const moveSimilar = async (direction) => {
                 similarItems.value.unshift(prevSimilar.value)
                 loadPrevSimilar()
             }
+            loadDifferent(similarItems.value[activeItem.value].id)
             break
         case 'right':
             if (activeItem.value == similarItems.value.length - 2) {
@@ -239,6 +247,7 @@ const moveSimilar = async (direction) => {
                 loadNextSimilar()
             }
             activeItem.value++
+            loadDifferent(similarItems.value[activeItem.value].id)
             break
     }
 
