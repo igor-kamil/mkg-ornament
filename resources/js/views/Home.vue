@@ -61,7 +61,7 @@
                 <navigate-button @click="moveSimilar('down')" direction="down"></navigate-button>
                 <v-lazy-image
                     :src="differentItems[1][1].image_src"
-                    :src-placeholder="differentItems[1][1].src-placeholder"
+                    :src-placeholder="differentItems[1][1].tiny_placeholder"
                     :alt="differentItems[1][1].title"
                     class="w-full h-full object-cover object-top"
                     :key="differentItems[1][1].image_src"
