@@ -143,8 +143,8 @@ const init = async (id = null) => {
     loadNextSimilar()
     loadPrevSimilar()
     // loadNextDifferent()
-    loadNextYounger()
-    loadNextOlder()
+    // loadNextYounger()
+    // loadNextOlder()
 }
 
 const loadNextSimilar = async () => {
@@ -152,7 +152,16 @@ const loadNextSimilar = async () => {
     const viewedItemIds = similarItems.value.map((item) => item.id).join(',')
     const response = await axios.get(`/api/similar-item/${id}/?exclude=${viewedItemIds}`)
     nextSimilar.value = response.data.data
-    loadImages([nextSimilar.value.image_src])
+    // loadImages([nextSimilar.value.image_src])
+    loadDifferent()
+}
+
+const loadDifferent = async () => {
+    const id = similarItems.value[activeItem.value].id
+    const viewedItemIds = similarItems.value.map((item) => item.id).join(',')
+    const response = await axios.get(`/api/different-items/${id}/?exclude=${viewedItemIds}`)
+    const items = response.data
+    differentItems.value = [items[0], items[1]]
 }
 
 const loadPrevSimilar = async () => {
