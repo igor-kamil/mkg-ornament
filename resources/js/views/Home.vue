@@ -143,8 +143,8 @@ const init = async (id = null) => {
     loadNextSimilar()
     loadPrevSimilar()
     // loadNextDifferent()
-    // loadNextYounger()
-    // loadNextOlder()
+    loadNextYounger()
+    loadNextOlder()
 }
 
 const loadNextSimilar = async () => {
@@ -153,11 +153,9 @@ const loadNextSimilar = async () => {
     const response = await axios.get(`/api/similar-item/${id}/?exclude=${viewedItemIds}`)
     nextSimilar.value = response.data.data
     // loadImages([nextSimilar.value.image_src])
-    loadDifferent()
 }
 
-const loadDifferent = async () => {
-    const id = similarItems.value[activeItem.value].id
+const loadDifferent = async (id) => {
     const viewedItemIds = similarItems.value.map((item) => item.id).join(',')
     const response = await axios.get(`/api/different-items/${id}/?exclude=${viewedItemIds}`)
     const items = response.data
@@ -174,7 +172,7 @@ const loadPrevSimilar = async () => {
 
 const loadNextDifferent = async () => {
     const id = similarItems.value[activeItem.value].id
-    const response = await axios.get(`/api/different-items/${id}`)
+    const response = await axios.get(`/api/different-items/${id}/?exclude=${viewedItemIds}`)
     nextDifferent.value = response.data
     loadImages(nextDifferent.value.map((item) => item.image_src))
 }
@@ -241,6 +239,7 @@ const moveSimilar = async (direction) => {
                 similarItems.value.unshift(prevSimilar.value)
                 loadPrevSimilar()
             }
+            loadDifferent(similarItems.value[activeItem.value].id)
             break
         case 'right':
             if (activeItem.value == similarItems.value.length - 2) {
@@ -248,6 +247,7 @@ const moveSimilar = async (direction) => {
                 loadNextSimilar()
             }
             activeItem.value++
+            loadDifferent(similarItems.value[activeItem.value].id)
             break
     }
 
