@@ -16,6 +16,7 @@ class Item extends Model
         'image_src',
         'asset_id',
         'tiny_placeholder',
+        'year',
     ];
 
     public function assets()
@@ -149,14 +150,14 @@ class Item extends Model
 
     public function getOlder($exclude = [])
     {
-      $olderItem = self::whereNotNull('tiny_placeholder')->where('year_from', '<=', $this->year_from)->whereNotIn('id', $exclude)->inRandomOrder()->first();
+      $olderItem = self::whereNotNull('tiny_placeholder')->whereNotNull('year')->where('year', '<=', $this->year)->whereNotIn('id', $exclude)->inRandomOrder()->first();
       return $olderItem;
     }
 
 
     public function getYounger($exclude = [])
     {
-      $youngerItem = Item::whereNotNull('tiny_placeholder')->where('year_from', '>=', $this->year_from)->whereNotIn('id', $exclude)->inRandomOrder()->first();
+      $youngerItem = Item::whereNotNull('tiny_placeholder')->whereNotNull('year')->where('year', '>=', $this->year)->whereNotIn('id', $exclude)->inRandomOrder()->first();
       return $youngerItem;
     }
 
