@@ -2,16 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ItemResource\Pages;
-use App\Filament\Resources\ItemResource\RelationManagers;
-use App\Models\Item;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Item;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\ItemResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\ItemResource\RelationManagers;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 
 class ItemResource extends Resource
 {
@@ -41,15 +44,20 @@ class ItemResource extends Resource
                     ->square()
                     ->label('Image'),
                 Tables\Columns\TextColumn::make('id')
-                    ->url(fn (Item $record): string => url('/') . '?id=' . $record->id, shouldOpenInNewTab: true)
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('title')
+                    ->getStateUsing(function (Item $record) {
+                        return Str::limit($record->title, 50);
+                    })
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('author')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->getStateUsing(function (Item $record) {
+                        return Str::limit($record->author, 50);
+                    }),
                 Tables\Columns\TextColumn::make('year_from')
                     ->sortable(),
             ])
@@ -61,9 +69,11 @@ class ItemResource extends Resource
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\Action::make('download')
                     ->label('Explore')
                     ->url(fn (Item $record): string => url('/') . '?id=' . $record->id, shouldOpenInNewTab: true)
+                    ->icon('heroicon-m-arrows-pointing-out')
 
             ])
             ->bulkActions([
@@ -84,8 +94,53 @@ class ItemResource extends Resource
     {
         return [
             'index' => Pages\ListItems::route('/'),
-            'create' => Pages\CreateItem::route('/create'),
-            'edit' => Pages\EditItem::route('/{record}/edit'),
+            // 'create' => Pages\CreateItem::route('/create'),
+            // 'edit' => Pages\EditItem::route('/{record}/edit'),
+            'view' => Pages\ViewItem::route('/{record}'),
         ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->columns(1)
+            ->schema([
+                Infolists\Components\ImageEntry::make('image_preview')
+                    ->state(function (Item $record): string {
+                        return $record->getImagePreview();
+                    }),
+                Infolists\Components\TextEntry::make('id'),
+                Infolists\Components\TextEntry::make('object'),
+                Infolists\Components\TextEntry::make('title'),
+                Infolists\Components\TextEntry::make('author'),
+                Infolists\Components\TextEntry::make('description'),
+                Infolists\Components\TextEntry::make('material'),
+                Infolists\Components\TextEntry::make('technique'),
+                Infolists\Components\TextEntry::make('iconography'),
+                Infolists\Components\TextEntry::make('style'),
+                Infolists\Components\TextEntry::make('image')
+                    ->state(function (Item $record): string {
+                        return $record->getImageRoute();
+                    })
+                    ->url(fn (Item $record): ?string => $record->getImageRoute())
+                    ->openUrlInNewTab()
+                    ->label('Image source on DAM'),
+                Infolists\Components\TextEntry::make('image_src')
+                    ->url(fn (Item $record): ?string => $record->image_src)
+                    ->openUrlInNewTab()
+                    ->label('Image source on digicult'),
+                Infolists\Components\TextEntry::make('web_url')
+                    ->url(fn (Item $record): ?string => $record->web_url)
+                    ->openUrlInNewTab(),
+                Infolists\Components\TextEntry::make('collection'),
+                Infolists\Components\TextEntry::make('year_from'),
+                Infolists\Components\TextEntry::make('year_to'),
+                Infolists\Components\TextEntry::make('acquisition_date'),
+                Infolists\Components\TextEntry::make('year')
+                    ->label('Calculated year')
+                    ->hint('Calculated from year_from, year_to and acquisition_date')
+                    ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Not displayed anywhere. Used for sorting'),
+                Infolists\Components\TextEntry::make('asset_id'),
+            ]);
     }
 }

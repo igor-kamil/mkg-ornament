@@ -169,8 +169,8 @@ class Item extends Model
         });
     }
 
-    function getImagePath() {
-        return storage_path("app/images/{$this->id}.jpg");
+    function getImageRoute(int $size = 1354) {
+        return 'https://mdo.mkg-hamburg.de/MDO/mediadelivery/rendition/' . $this->asset_id . '/-FJPG-B' . $size; // B1354 -> bounding box 1354px 
     }
 
     function getImagePreview() {
