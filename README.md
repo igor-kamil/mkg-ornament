@@ -1,8 +1,8 @@
-# CYOO
+# MK&G Ornament Explorer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Allow MKG visitors to curate own object in exhibition.
+Allow MKG visitors to explore ornamental arworks by similarity and year.
 
 Made as a part of [DATA EXPLORATION SPRINT at MKG Hamburg](https://www.mkg-hamburg.de/en/neo-lab)
 
@@ -12,12 +12,24 @@ This software is built with the [Laravel framework](http://laravel.com/).
 
 It requires
 
-1. PHP >= 7.4.x
+1. PHP >= 8
 1. MySQL >= 5.7
+1. Docker
 
-### Database setup
+### Weaviate db setup
 
-To be added...
+1. Run the docker file 
+    ```bash
+    docker compose up
+    ```
+1. Run the schema command
+    ```bash
+    php artisan weaviate:create-schema
+    ```
+1. Index the data from database with images to weaviate
+    ```bash
+    php artisan weaviate:add-data
+    ```
 
 ### Installation & local development
 
