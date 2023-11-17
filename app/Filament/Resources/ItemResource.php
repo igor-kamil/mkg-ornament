@@ -37,35 +37,34 @@ class ItemResource extends Resource
                     ->getStateUsing(function (Item $record) {
                         return $record->getImagePreview();
                     })
-                    ->url(fn (Item $record): string => url('/') . '?id='.$record->id )
+                    ->url(fn (Item $record): string => url('/') . '?id=' . $record->id, shouldOpenInNewTab: true)
+                    ->square()
                     ->label('Image'),
                 Tables\Columns\TextColumn::make('id')
-                    ->url(fn (Item $record): string => url('/') . '?id='.$record->id )
+                    ->url(fn (Item $record): string => url('/') . '?id=' . $record->id, shouldOpenInNewTab: true)
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('title')
-                ->sortable()
-                ->searchable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('author')
-                ->sortable()
-                ->searchable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('year_from')
-                ->sortable(),
+                    ->sortable(),
             ])
             ->filters([
                 Tables\Filters\Filter::make('tiny_placeholder_not_null')
                     ->toggle()
-                    ->label('Tiny Placeholder Not Null')
+                    ->label('Has image')
                     ->query(fn (Builder $query) => $query->whereNotNull('tiny_placeholder')),
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
-                // Tables\Actions\Action::make('download')
-                // ->label('Show in Ornament explorer')
-                // ->url(
-                //     fn (IncidentReport $record): string => url(). '?id=' . $record->id),
-                //     shouldOpenInNewTab: true
-                // )
+                Tables\Actions\Action::make('download')
+                    ->label('Explore')
+                    ->url(fn (Item $record): string => url('/') . '?id=' . $record->id, shouldOpenInNewTab: true)
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -73,14 +72,14 @@ class ItemResource extends Resource
                 ]),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -88,5 +87,5 @@ class ItemResource extends Resource
             'create' => Pages\CreateItem::route('/create'),
             'edit' => Pages\EditItem::route('/{record}/edit'),
         ];
-    }    
+    }
 }

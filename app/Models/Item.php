@@ -174,6 +174,9 @@ class Item extends Model
     }
 
     function getImagePreview() {
-      return route('image.show', ['id' => $this->id]);
+      if ($this->tiny_placeholder) {
+        return route('image.show', ['id' => $this->id, 'size' => 'tiny']);
+      }
+      return null;
   }
 }
