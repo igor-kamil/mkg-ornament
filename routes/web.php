@@ -28,6 +28,15 @@ Route::get('/qrcode/{id}.svg', function ($id) {
         ->header('Cache-Control', 'max-age=15552000');
 })->where('id', '[A-Za-z0-9.]+');
 
+Route::get('/preview/{id}', function ($id) {
+    $imagePath = storage_path("app/images/{$id}.jpg");
+    if (file_exists($imagePath)) {
+        return response()->file($imagePath);
+    }
+
+    abort(404);
+})->name('image.show');
+
 Route::get('/{any}', function () {
     return view('app');
 })->where('any', '.*');

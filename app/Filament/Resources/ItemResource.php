@@ -33,14 +33,30 @@ class ItemResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('image_preview')
+                    ->getStateUsing(function (Item $record) {
+                        return $record->getImagePreview();
+                    })
+                    ->url(fn (Item $record): string => url('/') . '?id='.$record->id )
+                    ->label('Image'),
                 Tables\Columns\TextColumn::make('id')
-                    ->url(fn (Item $record): string => url('/') . '?id='.$record->id ),
-                Tables\Columns\TextColumn::make('title'),
-                Tables\Columns\TextColumn::make('author'),
-                Tables\Columns\TextColumn::make('year_from'),
+                    ->url(fn (Item $record): string => url('/') . '?id='.$record->id )
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('title')
+                ->sortable()
+                ->searchable(),
+                Tables\Columns\TextColumn::make('author')
+                ->sortable()
+                ->searchable(),
+                Tables\Columns\TextColumn::make('year_from')
+                ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\Filter::make('tiny_placeholder_not_null')
+                    ->toggle()
+                    ->label('Tiny Placeholder Not Null')
+                    ->query(fn (Builder $query) => $query->whereNotNull('tiny_placeholder')),
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),

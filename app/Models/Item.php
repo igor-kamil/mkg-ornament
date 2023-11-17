@@ -168,4 +168,12 @@ class Item extends Model
             return  preg_replace('/^.*?(\d{4})$/', '$1', $year);
         });
     }
+
+    function getImagePath() {
+        return storage_path("app/images/{$this->id}.jpg");
+    }
+
+    function getImagePreview() {
+      return route('image.show', ['id' => $this->id]);
+  }
 }
