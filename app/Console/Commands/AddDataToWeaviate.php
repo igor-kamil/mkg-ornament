@@ -18,6 +18,14 @@ class AddDataToWeaviate extends Command
      */
     public function handle()
     {
+        $weaviate = new Weaviate(config('services.weaviate.url'), config('services.weaviate.token'));
+
+        $weaviate->batch()->delete($this->className, [
+            "operator" => "NotEqual",
+            "path" => ["id"],
+            "valueString" => "x"
+        ]);
+
         $items = Item::whereNotNull('asset_id')->get();
         $totalItems = $items->count();
 
@@ -28,24 +36,29 @@ class AddDataToWeaviate extends Command
             $imagePath = storage_path("app/images/{$item->id}.jpg");
 
             if (file_exists($imagePath)) {
-                $image = file_get_contents($imagePath);
-                $imageBase64 = base64_encode($image);
-                $weaviate = new Weaviate(config('services.weaviate.url'), config('services.weaviate.token'));
-                $object = $weaviate->dataObject()->create([
-                    'class' => $this->className,
-                    'properties' => [
-                        'identifier' => $item->id,
-                        'object' => $item->object,
-                        'title' => $item->title,
-                        'material' => $item->material,
-                        'technique' => $item->technique,
-                        'iconography' => $item->iconography,
-                        'style' => $item->style,
-                        'year' => $item->year,
-                        'collection' => $item->collection,
-                        'image' => $imageBase64,
-                    ]
-                ]);
+                try {
+                    $image = file_get_contents($imagePath);
+                    $imageBase64 = base64_encode($image);
+
+                    $object = $weaviate->dataObject()->create([
+                        'class' => $this->className,
+                        'properties' => [
+                            'identifier' => $item->id,
+                            'object' => $item->object,
+                            'title' => $item->title,
+                            'material' => $item->material,
+                            'technique' => $item->technique,
+                            'iconography' => $item->iconography,
+                            'style' => $item->style,
+                            'year' => $item->year,
+                            'collection' => $item->collection,
+                            'image' => $imageBase64,
+                        ]
+                    ]);
+                } catch (\Exception $e) {
+                    $this->error('An error occurred while adding data to Weaviate: ' . $e->getMessage());
+                    continue;
+                }
             }
             $progressBar->advance();
         }
