@@ -48,7 +48,7 @@ class ItemResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('title')
                     ->getStateUsing(function (Item $record) {
-                        return Str::limit($record->title, 50);
+                        return Str::limit($record->title, 40);
                     })
                     ->sortable()
                     ->searchable(),
@@ -56,7 +56,7 @@ class ItemResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->getStateUsing(function (Item $record) {
-                        return Str::limit($record->author, 50);
+                        return Str::limit($record->author, 40);
                     }),
                 Tables\Columns\TextColumn::make('year_from')
                     ->sortable(),
@@ -108,7 +108,9 @@ class ItemResource extends Resource
                 Infolists\Components\ImageEntry::make('image_preview')
                     ->state(function (Item $record): string {
                         return $record->getImagePreview();
-                    }),
+                    })
+                    ->url(fn (Item $record): ?string => $record->getImageRoute())
+                    ->openUrlInNewTab(),
                 Infolists\Components\TextEntry::make('id'),
                 Infolists\Components\TextEntry::make('object'),
                 Infolists\Components\TextEntry::make('title'),
