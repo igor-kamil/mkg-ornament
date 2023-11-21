@@ -5,16 +5,17 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use App\Models\Item;
 use Filament\Tables;
+use Filament\Infolists;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ItemResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ItemResource\RelationManagers;
-use Filament\Infolists;
-use Filament\Infolists\Infolist;
 
 class ItemResource extends Resource
 {
@@ -48,7 +49,7 @@ class ItemResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('title')
                     ->getStateUsing(function (Item $record) {
-                        return Str::limit($record->title, 30);
+                        return Str::limit($record->title, 25);
                     })
                     ->sortable()
                     ->searchable(),
@@ -56,10 +57,25 @@ class ItemResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->getStateUsing(function (Item $record) {
-                        return Str::limit($record->author, 30);
+                        return Str::limit($record->author, 15);
                     }),
                 Tables\Columns\TextColumn::make('year_from')
+                    ->getStateUsing(function (Item $record) {
+                        return Str::limit($record->year_from, 15);
+                    })
                     ->sortable(),
+                Tables\Columns\TextColumn::make('view_count')
+                    ->label('Views')
+                    ->badge()
+                    ->color(fn (int $state): string => $state > 0 ? 'primary' : 'gray')
+                    ->sortable()
+                    ->alignEnd(),
+                Tables\Columns\TextColumn::make('detail_count')
+                    ->label('Details')
+                    ->badge()
+                    ->color(fn (int $state): string => $state > 0 ? 'success' : 'gray')
+                    ->sortable()
+                    ->alignEnd(),
             ])
             ->filters([
                 Tables\Filters\Filter::make('tiny_placeholder_not_null')
@@ -106,7 +122,7 @@ class ItemResource extends Resource
             ->columns(1)
             ->schema([
                 Infolists\Components\ImageEntry::make('image_preview')
-                    ->state(function (Item $record): string {
+                    ->state(function (Item $record): ?string {
                         return $record->getImagePreview();
                     })
                     ->url(fn (Item $record): ?string => $record->getImageRoute())
@@ -121,7 +137,7 @@ class ItemResource extends Resource
                 Infolists\Components\TextEntry::make('iconography'),
                 Infolists\Components\TextEntry::make('style'),
                 Infolists\Components\TextEntry::make('image')
-                    ->state(function (Item $record): string {
+                    ->state(function (Item $record): ?string {
                         return $record->getImageRoute();
                     })
                     ->url(fn (Item $record): ?string => $record->getImageRoute())
@@ -143,6 +159,10 @@ class ItemResource extends Resource
                     ->hint('Calculated from year_from, year_to and acquisition_date')
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Not displayed anywhere. Used for sorting'),
                 Infolists\Components\TextEntry::make('asset_id'),
+                Infolists\Components\TextEntry::make('view_count')->badge()
+                    ->color(fn (int $state): string => $state > 0 ? 'primary' : 'gray'),
+                Infolists\Components\TextEntry::make('detail_count')->badge()
+                    ->color(fn (int $state): string => $state > 0 ? 'success' : 'gray'),
             ]);
     }
 }
