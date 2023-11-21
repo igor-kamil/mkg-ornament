@@ -31,6 +31,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 Route::get('/items/', function (Request $request) {
     $mainItem =  ($request->has('id')) ? Item::findOrFail($request->input('id')) : Item::whereNotNull('tiny_placeholder')->whereNotNull('year')->inRandomOrder()->first();
+    $mainItem->increment('view_count');
     $similarItems = $mainItem->getVisualySimilar(2);
     $youngerItem = $mainItem->getYounger();
     $similarToYoungerItem = $youngerItem->getVisualySimilar(2);
@@ -97,4 +98,16 @@ Route::get('/younger-items/{id}', function ($id, Request $request) {
     return response()->json(
         ItemResource::collection([$similarToYoungerItem[0], $youngerItem, $similarToYoungerItem[1]]),
     );
+});
+
+Route::put('/items/{id}/increment-view-count', function ($id) {
+    $item = Item::findOrFail($id);
+    $item->increment('view_count');
+    return response()->json(['message' => 'View count incremented successfully']);
+});
+
+Route::put('/items/{id}/increment-detail-count', function ($id) {
+    $item = Item::findOrFail($id);
+    $item->increment('detail_count');
+    return response()->json(['message' => 'Detail count incremented successfully']);
 });

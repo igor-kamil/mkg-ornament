@@ -48,7 +48,7 @@ class ItemResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('title')
                     ->getStateUsing(function (Item $record) {
-                        return Str::limit($record->title, 40);
+                        return Str::limit($record->title, 30);
                     })
                     ->sortable()
                     ->searchable(),
@@ -56,7 +56,7 @@ class ItemResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->getStateUsing(function (Item $record) {
-                        return Str::limit($record->author, 40);
+                        return Str::limit($record->author, 30);
                     }),
                 Tables\Columns\TextColumn::make('year_from')
                     ->sortable(),

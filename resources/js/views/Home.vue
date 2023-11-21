@@ -250,7 +250,7 @@ const moveSimilar = async (direction) => {
             loadDifferent(similarItems.value[activeItem.value].id)
             break
     }
-
+    incrementViewCount(similarItems.value[activeItem.value].id)
     isLoading.value = false
 }
 
@@ -273,6 +273,7 @@ const processResponse = async (response) => {
 
 const toggleDetail = () => {
     detailActive.value = !detailActive.value
+    incrementDetailCount(similarItems.value[activeItem.value].id)
 }
 
 const toggleInfo = () => {
@@ -290,5 +291,12 @@ const loadImages = (imageSrcArray) => {
     })
 
     return Promise.all(promises)
+}
+
+const incrementViewCount = async (id) => {
+    const response = await axios.put(`/api/items/${id}/increment-view-count`)
+}
+const incrementDetailCount = async (id) => {
+    const response = await axios.put(`/api/items/${id}/increment-detail-count`)
 }
 </script>
