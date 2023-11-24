@@ -16,20 +16,6 @@ It requires
 1. MySQL >= 5.7
 1. Docker
 
-### Weaviate db setup
-
-1. Run the docker file 
-    ```bash
-    docker compose up
-    ```
-1. Run the schema command
-    ```bash
-    php artisan weaviate:create-schema
-    ```
-1. Index the data from database with images to weaviate
-    ```bash
-    php artisan weaviate:add-data
-    ```
 
 ### Installation & local development
 
@@ -64,6 +50,40 @@ run a local front end development server
 ```bash
 npm run dev
 ```
+
+## Data
+
+There are to options how to get data in the app
+
+### Using seeder (quick & easy aproach for demo purposes)
+
+Just seed the provideed sample data using the command `php artisan db:seed`
+
+### Process used for MK&G collection data
+
+1. import item data from digikult export by: `php artisan import:items {file}` - check [ImportItems.php](app/Console/Commands/ImportItems.php) for details
+2. import assets data from DAM export by: `php artisan import:assets {file}` - check [ImportAssets.php](app/Console/Commands/ImportAssets.php) for details
+3. pair the items with their online collection url by: `php artisan import:urls {file}` - check [ImportUrls.php](app/Console/Commands/ImportUrls.php) for details
+
+## Images
+
+1. download the images for imported MK&G items by: `php artisan download:images`
+2. generate tiny placeholder images for items by: `php artisan generate:tiny-placeholders`
+
+## Weaviate db setup
+
+1. Run the docker file 
+    ```bash
+    docker compose up
+    ```
+1. Run the schema command
+    ```bash
+    php artisan weaviate:create-schema
+    ```
+1. Index the data from database with images to weaviate
+    ```bash
+    php artisan weaviate:add-data
+    ```
 
 ## License
 
