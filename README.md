@@ -2,9 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Allow MKG visitors to explore ornamental arworks by similarity and year.
+Allow MK&G museum visitors to explore ornamental arworks by visual similarity and metadata.
 
-Made as a part of [DATA EXPLORATION SPRINT at MKG Hamburg](https://www.mkg-hamburg.de/en/neo-lab)
+Developed by Igor Rjabinin and [Philo van Kemenade](https://github.com/phivk/) in partnership with [Museum für Kunst und Gewerbe Hamburg](https://www.mkg-hamburg.de/en) as part of the [NEO Lab Project](https://www.mkg-hamburg.de/en/neo-lab).
 
 ## Development
 
