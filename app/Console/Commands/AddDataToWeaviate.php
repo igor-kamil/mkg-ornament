@@ -32,7 +32,7 @@ class AddDataToWeaviate extends Command
         $progressBar = $this->output->createProgressBar($totalItems);
         $progressBar->start();
 
-        $chunkSize = 100;
+        $chunkSize = 30;
         $itemsQuery->chunk($chunkSize, function ($items) use ($weaviate, $progressBar) {
             $items_bulk = [];
             foreach ($items as $item) {
