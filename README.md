@@ -4,7 +4,7 @@
 
 Allow MK&G museum visitors to explore ornamental arworks by visual similarity and metadata.
 
-Developed by Igor Rjabinin and [Philo van Kemenade](https://github.com/phivk/) in partnership with [Museum für Kunst und Gewerbe Hamburg](https://www.mkg-hamburg.de/en) as part of the [NEO Lab Project](https://www.mkg-hamburg.de/en/neo-lab).
+Developed by [Igor Rjabinin](https://github.com/igor-kamil/) and [Philo van Kemenade](https://github.com/phivk/) in partnership with [Museum für Kunst und Gewerbe Hamburg](https://www.mkg-hamburg.de/en) as part of the [NEO Lab Project](https://www.mkg-hamburg.de/en/neo-lab).
 
 ## Development
 
@@ -19,7 +19,7 @@ It requires
 
 ### Installation & local development
 
-save `.env.exampole` as `.env`.
+save `.env.example` as `.env`.
 
 generate an application key:
 
@@ -34,6 +34,7 @@ composer install
 ```
 
 run a local back end development server
+(or use other solution. on mac we suggest to use [Herd](https://herd.laravel.com))
 
 ```bash
 php artisan serve
@@ -57,7 +58,7 @@ There are to options how to get data in the app
 
 ### Using seeder (quick & easy aproach for demo purposes)
 
-Just seed the provideed sample data using the command `php artisan db:seed`
+Just seed the provided sample data using the command `php artisan db:seed`
 
 ### Process used for MK&G collection data
 
@@ -84,6 +85,16 @@ Just seed the provideed sample data using the command `php artisan db:seed`
     ```bash
     php artisan weaviate:add-data
     ```
+
+## Admin
+
+This app contains also admin panel (reachable on `{yourhost}/admin`) build using [Filament](https://filamentphp.com).
+
+To create an user, run
+
+```bash
+php artisan make:filament-user
+```
 
 ## License
 
