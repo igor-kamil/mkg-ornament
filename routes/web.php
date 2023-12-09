@@ -21,7 +21,7 @@ Route::get('/qrcode/{id}.svg', function ($id) {
     return response($qrCode)
         ->header('Content-Type', 'image/svg+xml')
         ->header('Cache-Control', 'max-age=15552000');
-})->where('id', '[A-Za-z0-9.]+');
+})->where('id', '[A-Za-z0-9.\-]+');
 
 Route::get('/preview/{id}', function ($id) {
     $imagePath = storage_path("app/images/{$id}.jpg");
