@@ -59,10 +59,8 @@ class ItemResource extends Resource
                     ->getStateUsing(function (Item $record) {
                         return Str::limit($record->author, 15);
                     }),
-                Tables\Columns\TextColumn::make('year_from')
-                    ->getStateUsing(function (Item $record) {
-                        return Str::limit($record->year_from, 15);
-                    })
+                Tables\Columns\TextColumn::make('year')
+                    ->label('Year (approx.)')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('view_count')
                     ->label('Views')
@@ -82,6 +80,10 @@ class ItemResource extends Resource
                     ->toggle()
                     ->label('Has image')
                     ->query(fn (Builder $query) => $query->whereNotNull('tiny_placeholder')),
+                Tables\Filters\Filter::make('year_not_null')
+                    ->toggle()
+                    ->label('Has approx. year')
+                    ->query(fn (Builder $query) => $query->whereNotNull('year')),
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
