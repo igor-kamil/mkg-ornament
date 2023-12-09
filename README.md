@@ -19,7 +19,15 @@ It requires
 
 ### Installation & local development
 
-save `.env.example` as `.env`.
+for more details, you can read the [laravel installation documentation](https://laravel.com/docs/10.x/installation)
+
+copy `.env.example` to `.env` and insert your settings
+
+install back end dependencies
+
+```bash
+composer install
+```
 
 generate an application key:
 
@@ -27,11 +35,12 @@ generate an application key:
 php artisan key:generate
 ```
 
-install back end dependencies
+run migrations to create db tables:
 
 ```bash
-composer install
+php artisan migrate
 ```
+
 
 run a local back end development server
 (or use other solution. on mac we suggest to use [Herd](https://herd.laravel.com))
@@ -51,6 +60,7 @@ run a local front end development server
 ```bash
 npm run dev
 ```
+
 
 ## Data
 
