@@ -3,6 +3,7 @@
 use App\Models\Item;
 use Illuminate\Support\Facades\Route;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Http\Controllers\VisualSearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,9 @@ Route::get('/preview/{id}', function ($id) {
 
     abort(404);
 })->name('image.show');
+
+Route::get('/visual-search', [VisualSearchController::class, 'index']);
+Route::post('/visual-search', [VisualSearchController::class, 'search']);
 
 Route::get('/{any}', function () {
     return view('app');
